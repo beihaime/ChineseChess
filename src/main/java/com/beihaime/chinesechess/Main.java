@@ -1,21 +1,27 @@
 package com.beihaime.chinesechess;
 
-import com.beihaime.chinesechess.model.Board;
+import com.beihaime.chinesechess.game.Game;
 import com.beihaime.chinesechess.model.Position;
-import com.beihaime.chinesechess.rule.RuleEngine;
 
 public class Main {
-    public static void main(String[] args) {
-        Board board = new Board();
-        board.setupInitialPosition();
-        board.printBoard();
-//        System.out.println("移動後");
-        RuleEngine ruleEngine = new RuleEngine();
-        boolean legal = ruleEngine.isLegalMove(
-                board,
-                new Position(0,0),
-                new Position(9,1));
-//        board.printBoard();
-        System.out.println(legal);
+    static void main(String[] args) {
+        Game game = new Game();
+        System.out.println("移动后：");
+
+        System.out.println(
+                game.move(
+                        new Position(1,9),
+                        new Position(2,7)
+                )
+        );
+        game.printBoard();
+        System.out.println("移动后：");
+        System.out.println(
+                game.move(
+                        new Position(1,3),
+                        new Position(2,5)
+                )
+        );
+        game.printBoard();
     }
 }
