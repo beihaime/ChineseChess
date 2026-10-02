@@ -3,7 +3,7 @@ package com.beihaime.chinesechess.rule;
 import com.beihaime.chinesechess.model.*;
 
 public class RuleEngine {
-    public boolean isLegalMove(Board board, Position from, Position to) {
+    private boolean isBasicLegalMove(Board board, Position from, Position to) {
         //Piece area valid check
         if (!board.isInsideBoard(from) || !board.isInsideBoard(to)) {
             return false;
@@ -37,6 +37,96 @@ public class RuleEngine {
             default:
                 return false;
         }
+    }
+
+    public boolean isInCheck(Board board, Side side) {
+        Position generalPosition = null;
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 9; x++) {
+                Piece piece = board.getPiece(new Position(x, y));
+                if (piece == null) {
+                    continue;
+                }
+                if (piece.getPieceType() == PieceType.GENERAL &&
+                        piece.getSide() == side) {
+                    generalPosition = new Position(x, y);
+                }
+            }
+        }
+        if (generalPosition == null) {
+            return false;
+        }
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 9; x++) {
+                Piece piece = board.getPiece(new Position(x, y));
+                if (piece == null) {
+                    continue;
+                }
+                if (piece.getSide() == side) {
+                    continue;
+                }
+                Position attackPosition = new Position(x, y);
+                if (isBasicLegalMove(board,attackPosition,generalPosition)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
+
+    public boolean isLegalMove(Board board, Position from, Position to) {
+        if (!isBasicLegalMove(board, from, to)) {
+            return false;
+        }
+        Piece movingPiece = board.getPiece(from);
+        Piece capturedPiece = board.getPiece(to);
+        board.movePiece(from, to);
+        boolean facing = generalsFacing(board);
+        boolean isInCheck = isInCheck(board , movingPiece.getSide());
+        board.removePiece(to);
+        board.setPiece(from,movingPiece);
+        if (capturedPiece != null) {
+            // Restore the captured piece
+            board.setPiece(to, capturedPiece);
+        }
+        return !facing && !isInCheck;
+    }
+
+    public boolean hasAnyLegalMoves(Board board, Side side) {
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 9; x++) {
+                Piece piece = board.getPiece(new Position(x, y));
+                if (piece == null) {
+                    continue;
+                }
+                if (piece.getSide() != side) {
+                    continue;
+                }
+                Position from = new Position(x, y);
+                for (int toY = 0; toY < 10; toY++) {
+                    for (int toX = 0; toX < 9; toX++) {
+                        Position to = new Position(toX, toY);
+                        if (isLegalMove(board, from, to)) {
+                            return true;
+                        }
+                    }
+                }
+
+            }
+        }
+        return false;
+    }
+
+    public boolean isCheckmate(Board board , Side side) {
+        return isInCheck(board, side) && !hasAnyLegalMoves(board, side);
+    }
+
+    public boolean isStalemate(Board board, Side side) {
+        if (isInCheck(board, side)) {
+            return false;
+        }
+        return !hasAnyLegalMoves(board, side);
     }
 
     private boolean rookCheck(Board board, Position from, Position to){
@@ -80,10 +170,7 @@ public class RuleEngine {
             int direction = Integer.signum(to.y() - from.y());
             leg = new Position(from.x(), from.y() + direction);
         }
-        if (board.getPiece(leg) != null) {
-            return false;
-        }
-        return true;
+        return board.getPiece(leg) == null;
     }
 
     private boolean elephantCheck(Board board, Position from, Position to) {
@@ -104,10 +191,7 @@ public class RuleEngine {
             return false;
         }
         center = new Position(from.x() + directionX, from.y()+ directionY);
-        if (board.getPiece(center) != null) {
-            return false;
-        }
-        return true;
+        return board.getPiece(center) == null;
     }
 
     private boolean advisorCheck(Board board, Position from, Position to) {
@@ -125,11 +209,8 @@ public class RuleEngine {
                 (to.y() > 2 || to.y() < 0)) {
             return false;
         }
-        if (self.getSide() == Side.RED &&
-                (to.y() > 9 || to.y() < 7)) {
-            return false;
-        }
-        return true;
+        return self.getSide() != Side.RED ||
+                (to.y() <= 9 && to.y() >= 7);
     }
 
     private boolean generalsFacing(Board board) {
@@ -194,15 +275,9 @@ public class RuleEngine {
             return false;
         }
         //Red area
-        if (self.getSide() == Side.RED &&
-                (to.y() > 9 || to.y() < 7)) {
-            return false;
-        }
+        return self.getSide() != Side.RED ||
+                (to.y() <= 9 && to.y() >= 7);
         //General cannot meet
-        if (generalsFacing(board)) {
-            return false;
-        }
-        return true;
     }
 
     private boolean cannonCheck(Board board, Position from, Position to) {
@@ -241,10 +316,10 @@ public class RuleEngine {
         int dx = Math.abs(to.x() - from.x());
         int dy = to.y() - from.y();
         boolean sideways = dx == 1 && dy == 0;
-        boolean forward = (self.getSide() == Side.BLACK && dy == 1)
+        boolean forward = dx == 0 &&
+                ((self.getSide() == Side.BLACK && dy == 1)
                             ||
-                        (self.getSide() == Side.RED && dy == -1);
-        int river = 5;
+                        (self.getSide() == Side.RED && dy == -1));
         //Pawn cannot move sideways before crossing the river
         boolean crossedRiver = false;
         if (self.getSide() == Side.BLACK ) {

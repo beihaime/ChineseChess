@@ -10,11 +10,9 @@ public class Board {
                 && position.y() < 10;
     }
 
-
     public Piece getPiece(Position position) {
         return pieces[position.x()][position.y()];
     }
-
 
     public void setPiece(Position position, Piece piece) {
         pieces[position.x()][position.y()] = piece;
@@ -38,7 +36,7 @@ public class Board {
         for (int y=0; y<10; y++){
             for (int x=0; x<9; x++){
                 if(pieces[x][y] == null){
-                    System.out.print("+  ");
+                    System.out.print("＋ ");
                 }
                 else{
                     System.out.print(pieces[x][y] + " ");
