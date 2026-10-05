@@ -1,10 +1,10 @@
 package com.beihaime.chinesechess;
 
-import com.beihaime.chinesechess.game.Game;
+import com.beihaime.chinesechess.ui.ChessApplication;
 
-public class Main {
+
+public class Main{
     static void main(String[] args) {
-        Game game = new Game();
-        game.printBoard();
+        ChessApplication.launchApp(args);
     }
 }

@@ -107,6 +107,9 @@ public class Game {
     }
 
 
+    public Side getCurrentTurn() {
+        return currentTurn;
+    }
 
     public boolean isCurrentPlayerInCheck() {
         return ruleEngine.isInCheck(board, currentTurn);
