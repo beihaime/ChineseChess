@@ -20,13 +20,17 @@ public class Game {
     private final RuleEngine ruleEngine;
     private Side currentTurn;
     private final List<Move> moveHistory = new ArrayList<>();
-    private final List<Move> undoHistory = new ArrayList<>();
+    private final List<Move> redoHistory = new ArrayList<>();
     public void printBoard() {
         board.printBoard();
     }
 
     public Board getBoard() {
         return board;
+    }
+
+    private void switchTurn() {
+        currentTurn = (currentTurn == Side.RED) ? Side.BLACK : Side.RED;
     }
 
     public List<Move> getMoveHistory() {
@@ -70,8 +74,8 @@ public class Game {
         Piece capturedPiece = board.getPiece(to);
         board.movePiece(from, to);
         moveHistory.add(new Move(from, to ,movingPiece ,capturedPiece));
-        currentTurn = (currentTurn == Side.RED) ? Side.BLACK : Side.RED;
-        undoHistory.clear();
+        switchTurn();
+        redoHistory.clear();
         return MoveResult.SUCCESS;
     }
 
@@ -85,20 +89,20 @@ public class Game {
         if (lastMove.capturedPiece() != null) {
             board.setPiece(lastMove.to(),lastMove.capturedPiece());
         }
-        undoHistory.add(lastMove);
-        currentTurn = (currentTurn == Side.RED) ? Side.BLACK : Side.RED;
+        redoHistory.add(lastMove);
+        switchTurn();
         return MoveResult.UNDO;
     }
 
     public MoveResult redo() {
-        if (undoHistory.isEmpty()) {
+        if (redoHistory.isEmpty()) {
             return MoveResult.NOTHING_TO_REDO;
         }
-        Move lastundo = undoHistory.removeLast();
-        board.movePiece(lastundo.from(),lastundo.to());
+        Move lastUndoneMove = redoHistory.removeLast();
+        board.movePiece(lastUndoneMove.from(),lastUndoneMove.to());
 
-        moveHistory.add(lastundo);
-        currentTurn = (currentTurn == Side.RED) ? Side.BLACK : Side.RED;
+        moveHistory.add(lastUndoneMove);
+        switchTurn();
         return MoveResult.REDO;
     }
 
@@ -121,18 +125,9 @@ public class Game {
     }
 
     public GameStatus getStatus() {
-        if (ruleEngine.isCheckmate(board, currentTurn)) {
-            return GameStatus.CHECKMATE;
-        }
-        if (ruleEngine.isInCheck(board, currentTurn)) {
-            return GameStatus.CHECK;
-        }
-        if (ruleEngine.isStalemate(board, currentTurn)) {
-            return GameStatus.STALEMATE;
-        }
-        return GameStatus.RUNNING;
+        boolean inCheck = ruleEngine.isInCheck(board, currentTurn);
+        boolean hasLegalMoves = ruleEngine.hasAnyLegalMoves(board, currentTurn);
+        if (!hasLegalMoves) {return inCheck ? GameStatus.CHECKMATE : GameStatus.STALEMATE;}
+        return inCheck ? GameStatus.CHECK : GameStatus.RUNNING;
     }
-
-
-
 }
