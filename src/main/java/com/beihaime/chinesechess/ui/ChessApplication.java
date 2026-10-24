@@ -10,7 +10,7 @@ public class ChessApplication extends Application {
     public void start(Stage stage) {
         Game game = new Game();
         BorderPane root = new BorderPane();
-        ChessBoardView boardView = new ChessBoardView(450, 500, game);
+        ChessBoardView boardView = new ChessBoardView(500, 500, game);
         root.setCenter(boardView);
         Scene scene = new Scene(root, 800 ,700);
         stage.setTitle("Chinese Chess");
