@@ -63,10 +63,10 @@ public class ChessBoardView extends Canvas {
                     refresh();
                     return;
                 }
-                soundManager.playMove(0.6);
                 MoveResult result = game.move(selectedPosition, clickedPosition);
                 System.out.println("MoveResult: " + result);
                 if (result == MoveResult.SUCCESS) {
+                    soundManager.playMove(0.6);
                     selectedPosition = null;
                     refresh();
                 }
