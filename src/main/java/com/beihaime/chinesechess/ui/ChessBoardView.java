@@ -112,6 +112,7 @@ public class ChessBoardView extends Canvas {
         gc.fillText("汉界", START_X + 6 * SPACING, START_Y + 4.5 * SPACING);
     }
 
+
     private void drawPieces() {
         GraphicsContext gc = getGraphicsContext2D();
         gc.setTextAlign(TextAlignment.CENTER);

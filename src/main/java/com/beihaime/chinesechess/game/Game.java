@@ -29,7 +29,7 @@ public class Game {
         return board;
     }
 
-    public void switchTurn() {
+    private void switchTurn() {
         currentTurn = (currentTurn == Side.RED) ? Side.BLACK : Side.RED;
     }
 

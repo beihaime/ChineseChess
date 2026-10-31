@@ -2,6 +2,7 @@ package com.beihaime.chinesechess.model;
 
 public class Board {
     private final Piece[][] pieces = new Piece[9][10];
+    private final Side bottomSide = Side.BLACK;
 
     public boolean isInsideBoard(Position position) {
         return position.x() >= 0
@@ -47,44 +48,52 @@ public class Board {
     }
 
     public void setupInitialPosition() {
+        Side topSide = (bottomSide == Side.BLACK) ? Side.RED : Side.BLACK;
         //RED
-        setPiece(new Position(0,9), new Piece(Side.RED, PieceType.ROOK));
-        setPiece(new Position(8,9), new Piece(Side.RED, PieceType.ROOK));
-        setPiece(new Position(1,9), new Piece(Side.RED, PieceType.HORSE));
-        setPiece(new Position(7,9), new Piece(Side.RED, PieceType.HORSE));
-        setPiece(new Position(2,9), new Piece(Side.RED, PieceType.ELEPHANT));
-        setPiece(new Position(6,9), new Piece(Side.RED, PieceType.ELEPHANT));
-        setPiece(new Position(3,9), new Piece(Side.RED, PieceType.ADVISOR));
-        setPiece(new Position(5,9), new Piece(Side.RED, PieceType.ADVISOR));
-        setPiece(new Position(4,9), new Piece(Side.RED, PieceType.GENERAL));
+        setPiece(new Position(0,9), new Piece(bottomSide, PieceType.ROOK));
+        setPiece(new Position(8,9), new Piece(bottomSide, PieceType.ROOK));
+        setPiece(new Position(1,9), new Piece(bottomSide, PieceType.HORSE));
+        setPiece(new Position(7,9), new Piece(bottomSide, PieceType.HORSE));
+        setPiece(new Position(2,9), new Piece(bottomSide, PieceType.ELEPHANT));
+        setPiece(new Position(6,9), new Piece(bottomSide, PieceType.ELEPHANT));
+        setPiece(new Position(3,9), new Piece(bottomSide, PieceType.ADVISOR));
+        setPiece(new Position(5,9), new Piece(bottomSide, PieceType.ADVISOR));
+        setPiece(new Position(4,9), new Piece(bottomSide, PieceType.GENERAL));
 
-        setPiece(new Position(1,7), new Piece(Side.RED, PieceType.CANNON));
-        setPiece(new Position(7,7), new Piece(Side.RED, PieceType.CANNON));
+        setPiece(new Position(1,7), new Piece(bottomSide, PieceType.CANNON));
+        setPiece(new Position(7,7), new Piece(bottomSide, PieceType.CANNON));
 
-        setPiece(new Position(0,6), new Piece(Side.RED, PieceType.PAWN));
-        setPiece(new Position(2,6), new Piece(Side.RED, PieceType.PAWN));
-        setPiece(new Position(4,6), new Piece(Side.RED, PieceType.PAWN));
-        setPiece(new Position(6,6), new Piece(Side.RED, PieceType.PAWN));
-        setPiece(new Position(8,6), new Piece(Side.RED, PieceType.PAWN));
+        setPiece(new Position(0,6), new Piece(bottomSide, PieceType.PAWN));
+        setPiece(new Position(2,6), new Piece(bottomSide, PieceType.PAWN));
+        setPiece(new Position(4,6), new Piece(bottomSide, PieceType.PAWN));
+        setPiece(new Position(6,6), new Piece(bottomSide, PieceType.PAWN));
+        setPiece(new Position(8,6), new Piece(bottomSide, PieceType.PAWN));
 
         //BLACK
-        setPiece(new Position(0,0), new Piece(Side.BLACK, PieceType.ROOK));
-        setPiece(new Position(8,0), new Piece(Side.BLACK, PieceType.ROOK));
-        setPiece(new Position(1,0), new Piece(Side.BLACK, PieceType.HORSE));
-        setPiece(new Position(7,0), new Piece(Side.BLACK, PieceType.HORSE));
-        setPiece(new Position(2,0), new Piece(Side.BLACK, PieceType.ELEPHANT));
-        setPiece(new Position(6,0), new Piece(Side.BLACK, PieceType.ELEPHANT));
-        setPiece(new Position(3,0), new Piece(Side.BLACK, PieceType.ADVISOR));
-        setPiece(new Position(5,0), new Piece(Side.BLACK, PieceType.ADVISOR));
-        setPiece(new Position(4,0), new Piece(Side.BLACK, PieceType.GENERAL));
+        setPiece(new Position(0,0), new Piece(topSide, PieceType.ROOK));
+        setPiece(new Position(8,0), new Piece(topSide, PieceType.ROOK));
+        setPiece(new Position(1,0), new Piece(topSide, PieceType.HORSE));
+        setPiece(new Position(7,0), new Piece(topSide, PieceType.HORSE));
+        setPiece(new Position(2,0), new Piece(topSide, PieceType.ELEPHANT));
+        setPiece(new Position(6,0), new Piece(topSide, PieceType.ELEPHANT));
+        setPiece(new Position(3,0), new Piece(topSide, PieceType.ADVISOR));
+        setPiece(new Position(5,0), new Piece(topSide, PieceType.ADVISOR));
+        setPiece(new Position(4,0), new Piece(topSide, PieceType.GENERAL));
 
-        setPiece(new Position(1,2), new Piece(Side.BLACK, PieceType.CANNON));
-        setPiece(new Position(7,2), new Piece(Side.BLACK, PieceType.CANNON));
+        setPiece(new Position(1,2), new Piece(topSide, PieceType.CANNON));
+        setPiece(new Position(7,2), new Piece(topSide, PieceType.CANNON));
 
-        setPiece(new Position(0,3), new Piece(Side.BLACK, PieceType.PAWN));
-        setPiece(new Position(2,3), new Piece(Side.BLACK, PieceType.PAWN));
-        setPiece(new Position(4,3), new Piece(Side.BLACK, PieceType.PAWN));
-        setPiece(new Position(6,3), new Piece(Side.BLACK, PieceType.PAWN));
-        setPiece(new Position(8,3), new Piece(Side.BLACK, PieceType.PAWN));
+        setPiece(new Position(0,3), new Piece(topSide, PieceType.PAWN));
+        setPiece(new Position(2,3), new Piece(topSide, PieceType.PAWN));
+        setPiece(new Position(4,3), new Piece(topSide, PieceType.PAWN));
+        setPiece(new Position(6,3), new Piece(topSide, PieceType.PAWN));
+        setPiece(new Position(8,3), new Piece(topSide, PieceType.PAWN));
+    }
+
+    public Side getBottomSide() {
+        return bottomSide;
+    }
+    public Side getTopSide() {
+        return (bottomSide == Side.BLACK) ? Side.RED : Side.BLACK;
     }
 }

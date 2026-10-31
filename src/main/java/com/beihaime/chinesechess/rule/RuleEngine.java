@@ -174,6 +174,7 @@ public class RuleEngine {
     }
 
     private boolean elephantCheck(Board board, Position from, Position to) {
+        Side bottomSide = board.getBottomSide();
         Position center;
         Piece self = board.getPiece(from);
         int river = 5;
@@ -186,15 +187,23 @@ public class RuleEngine {
             return false;
         }
         //Elephant cannot cross river
-        if (self.getSide() == Side.BLACK && to.y() >= river
-                || self.getSide() == Side.RED && to.y() < river) {
-            return false;
+        if (bottomSide.equals(Side.RED)) {
+            if (self.getSide() == Side.BLACK && to.y() >= river
+                    || self.getSide() == Side.RED && to.y() < river) {
+                return false;
+            }
+        } else if (bottomSide.equals(Side.BLACK)) {
+            if (self.getSide() == Side.BLACK && to.y() <= river
+                    || self.getSide() == Side.RED && to.y() > river) {
+                return false;
+            }
         }
         center = new Position(from.x() + directionX, from.y()+ directionY);
         return board.getPiece(center) == null;
     }
 
     private boolean advisorCheck(Board board, Position from, Position to) {
+        Side bottomSide = board.getBottomSide();
         int dx = Math.abs(to.x() - from.x());
         int dy = Math.abs(to.y() - from.y());
         Piece self = board.getPiece(from);
@@ -205,12 +214,13 @@ public class RuleEngine {
         if (to.x() > 5 || to.x() < 3 ) {
             return false;
         }
-        if (self.getSide() == Side.BLACK &&
-                (to.y() > 2 || to.y() < 0)) {
+        //Black area
+        if (self.getSide() == Side.BLACK && bottomSide.equals(Side.BLACK) &&
+                (to.y() < 7 || to.y() > 9)) {
             return false;
         }
-        return self.getSide() != Side.RED ||
-                (to.y() <= 9 && to.y() >= 7);
+        //Red area
+        return self.getSide() != Side.RED || !bottomSide.equals(Side.RED) || to.y() >= 7;
     }
 
     private boolean generalsFacing(Board board) {
@@ -250,6 +260,7 @@ public class RuleEngine {
     }
 
     private boolean generalCheck(Board board, Position from, Position to) {
+        Side bottomSide = board.getBottomSide();
         Piece self = board.getPiece(from);
         boolean sameX = to.x() == from.x();
         boolean sameY = to.y() == from.y();
@@ -270,14 +281,12 @@ public class RuleEngine {
             return false;
         }
         //Black area
-        if (self.getSide() == Side.BLACK &&
-                (to.y() > 2 || to.y() < 0)) {
+        if (self.getSide() == Side.BLACK && bottomSide.equals(Side.BLACK) &&
+                (to.y() < 7 || to.y() > 9)) {
             return false;
         }
         //Red area
-        return self.getSide() != Side.RED ||
-                (to.y() <= 9 && to.y() >= 7);
-        //General cannot meet
+        return self.getSide() != Side.RED || !bottomSide.equals(Side.RED) || to.y() >= 7;
     }
 
     private boolean cannonCheck(Board board, Position from, Position to) {
@@ -312,21 +321,32 @@ public class RuleEngine {
     }
 
     private boolean pawnCheck(Board board, Position from, Position to) {
+        Side bottomSide =board.getBottomSide();
         Piece self = board.getPiece(from);
         int dx = Math.abs(to.x() - from.x());
         int dy = to.y() - from.y();
         boolean sideways = dx == 1 && dy == 0;
-        boolean forward = dx == 0 &&
-                ((self.getSide() == Side.BLACK && dy == 1)
-                            ||
+        boolean forward = dx == 0 && (
+                (self.getSide() == Side.BLACK && dy == 1) ||
                         (self.getSide() == Side.RED && dy == -1));
+        if (bottomSide == Side.BLACK) {
+            forward = dx == 0 && (
+                    (self.getSide() == Side.BLACK && dy == -1) ||
+                            (self.getSide() == Side.RED && dy == 1));
+        }
         //Pawn cannot move sideways before crossing the river
         boolean crossedRiver = false;
-        if (self.getSide() == Side.BLACK ) {
-            crossedRiver = from.y() >= 5;
-        } else {
-            crossedRiver = from.y() < 5;
+        int river = 5;
+        if (self.getSide() == Side.RED && bottomSide.equals(Side.RED)) {
+            crossedRiver = from.y() < river;
+        } else if (self.getSide() == Side.RED && bottomSide.equals(Side.BLACK)) {
+            crossedRiver = from.y() >= river;
+        } else if (self.getSide() == Side.BLACK && bottomSide.equals(Side.RED)) {
+            crossedRiver = from.y() >= river;
+        } else if (self.getSide() == Side.BLACK && bottomSide.equals(Side.BLACK)) {
+            crossedRiver = from.y() < river;
         }
+
         if (!crossedRiver) {
             return forward;
         }
