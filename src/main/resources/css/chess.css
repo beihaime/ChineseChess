@@ -1,0 +1,65 @@
+
+/* Global background */
+.root {
+    -fx-background-color: #E8DCC8;
+    -fx-font-family: "Noto Sans CJK SC";
+    -fx-background-color: #E8DCC8;
+}
+
+/* Main application container */
+.main-container {
+    -fx-background-color: #E8DCC8;
+    -fx-padding: 24px;
+    -fx-spacing: 20px;
+}
+
+/* Chessboard frame */
+.board-container {
+    -fx-background-color: #795548;
+    -fx-padding: 12px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(
+            gaussian,
+            rgba(50, 30, 15, 0.25),
+            12, 0.2, 0, 4
+    );
+}
+
+/* Control panel */
+.control-panel {
+    -fx-background-color: #F4EBDD;
+    -fx-background-radius: 10px;
+    -fx-padding: 18px;
+    -fx-spacing: 12px;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #795548;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 6px;
+    -fx-padding: 9px 18px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #5D4037;
+}
+
+.button:pressed {
+    -fx-background-color: #4E342E;
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: #3B3028;
+}
+
+/* Red and black pieces */
+.red-piece {
+    -fx-text-fill: #B83232;
+}
+
+.black-piece {
+    -fx-text-fill: #252525;
+}

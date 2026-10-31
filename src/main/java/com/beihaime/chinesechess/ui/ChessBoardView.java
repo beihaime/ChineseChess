@@ -20,12 +20,12 @@ public class ChessBoardView extends Canvas {
     private final Board board;
     private final SoundManager soundManager = new SoundManager();
     private Position selectedPosition;
-    private static final double START_X = 50;
-    private static final double START_Y = 50;
+    private static final double PIECE_SIZE = 34;
     private static final double SPACING = 40;
-    private static final double RIGHT_X = START_X + 8 * SPACING;
-    private static final double BOTTOM_Y = START_Y + 9 * SPACING;
-    private static final double PIECE_SIZE = 32;
+    private double getStartX() {return (getWidth() - 8 * SPACING) / 2;}
+    private double getStartY() {return (getHeight() - 9 * SPACING) / 2;}
+    private double getRightX() {return getStartX() + 8 * SPACING;}
+    private double getBottomY() {return getStartY() + 9 * SPACING;}
 
     public ChessBoardView(double width, double height, Game game) {
         super(width, height);
@@ -35,8 +35,8 @@ public class ChessBoardView extends Canvas {
         setOnMouseClicked(event -> {
             double mouseX = event.getX();
             double mouseY = event.getY();
-            int x = (int) Math.round((mouseX - START_X) / SPACING);
-            int y = (int) Math.round((mouseY - START_Y) / SPACING);
+            int x = (int) Math.round((mouseX - getStartX()) / SPACING);
+            int y = (int) Math.round((mouseY - getStartY()) / SPACING);
             if (x < 0 || x > 8 || y < 0 || y > 9) {
                 return;
             }
@@ -77,41 +77,49 @@ public class ChessBoardView extends Canvas {
     private void drawBoard() {
         GraphicsContext gc = getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
-        gc.setFill(Color.BLACK);
+        gc.setFill(Color.BEIGE);
+        gc.fillRect(
+                getStartX() - 20,
+                getStartY() -20,
+                8 * SPACING + 40,
+                9 * SPACING + 40
+        );
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
         gc.setFont(Font.font(20));
         for (int x = 0; x < 9; x++) {
             //Column line
-            double screenX = START_X + x * SPACING;
+            double screenX = getStartX() + x * SPACING;
             if (x == 0 || x == 8) {
                 //Each two Side
-                gc.strokeLine(screenX, START_Y, screenX, BOTTOM_Y);
+                gc.strokeLine(screenX, getStartY(), screenX, getBottomY());
             } else {
                 //Upside
-                gc.strokeLine(screenX, START_Y, screenX, START_Y + 4 * SPACING);
+                gc.strokeLine(screenX, getStartY(), screenX, getStartY() + 4 * SPACING);
                 //Downside
-                gc.strokeLine(screenX, START_Y + 5 * SPACING, screenX, BOTTOM_Y);
+                gc.strokeLine(screenX, getStartY() + 5 * SPACING, screenX, getBottomY());
             }
         }
         for (int y =0; y < 10; y++){
-            double screenY = START_Y + y * SPACING;
+            double screenY = getStartY() + y * SPACING;
             //Row line
-            gc.strokeLine(START_X,screenY,RIGHT_X,screenY);
+            gc.strokeLine(getStartX(),screenY,getRightX(),screenY);
         }
 
         //Diagonal-UP
-        gc.strokeLine(START_X+ 3 *SPACING, START_Y ,START_X + 5 * SPACING, START_Y + 2 * SPACING);
-        gc.strokeLine(START_X+ 5 *SPACING, START_Y ,START_X + 3 * SPACING, START_Y + 2 * SPACING);
+        gc.strokeLine(getStartX()+ 3 *SPACING, getStartY() ,getStartX() + 5 * SPACING, getStartY() + 2 * SPACING);
+        gc.strokeLine(getStartX()+ 5 *SPACING, getStartY() ,getStartX() + 3 * SPACING, getStartY() + 2 * SPACING);
 
         //Diagonal-Down
-        gc.strokeLine(START_X+ 3 *SPACING, BOTTOM_Y ,START_X + 5 * SPACING, BOTTOM_Y - 2 * SPACING);
-        gc.strokeLine(START_X+ 5 *SPACING, BOTTOM_Y ,START_X + 3 * SPACING, BOTTOM_Y - 2 * SPACING);
-
-        gc.fillText("楚河", START_X + 2 * SPACING, START_Y + 4.5 * SPACING);
-        gc.fillText("汉界", START_X + 6 * SPACING, START_Y + 4.5 * SPACING);
+        gc.strokeLine(getStartX()+ 3 *SPACING, getBottomY() ,getStartX() + 5 * SPACING, getBottomY() - 2 * SPACING);
+        gc.strokeLine(getStartX()+ 5 *SPACING, getBottomY() ,getStartX() + 3 * SPACING, getBottomY() - 2 * SPACING);
+        gc.setFill(Color.BLACK);
+        gc.setFont(Font.font("Noto Sans CJK SC", 35));
+        gc.setTextAlign(TextAlignment.CENTER);
+        gc.setTextBaseline(VPos.CENTER);
+        gc.fillText("楚河", getStartX() + 2 * SPACING, getStartY() + 4.5 * SPACING);
+        gc.fillText("汉界", getStartX() + 6 * SPACING, getStartY() + 4.5 * SPACING);
     }
-
 
     private void drawPieces() {
         GraphicsContext gc = getGraphicsContext2D();
@@ -123,8 +131,8 @@ public class ChessBoardView extends Canvas {
                 Position position = new Position(x, y);
                 Piece piece = board.getPiece(position);
                 if (piece != null){
-                    double screenX = START_X + x * SPACING;
-                    double screenY = START_Y + y * SPACING;
+                    double screenX = getStartX() + x * SPACING;
+                    double screenY = getStartY() + y * SPACING;
                     //Highlight selected piece
                     if (position.equals(selectedPosition)) {
                         drawHighlight(screenX, screenY ,Color.YELLOW);
@@ -151,8 +159,8 @@ public class ChessBoardView extends Canvas {
         for (int y = 0; y < 10; y++) {
             for(int x = 0; x < 9; x++){
                 Position capturePosition = new Position(x, y);
-                double screenX = START_X + x * SPACING;
-                double screenY = START_Y + y * SPACING;
+                double screenX = getStartX() + x * SPACING;
+                double screenY = getStartY() + y * SPACING;
                 if (game.move(selectedPosition , capturePosition) == MoveResult.SUCCESS) {
                     drawHighlight(screenX, screenY,color);
                     game.undo();
