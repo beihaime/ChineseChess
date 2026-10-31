@@ -1,5 +1,12 @@
 # ChineseChess · 中国象棋
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Java](https://img.shields.io/badge/Java-25-orange.svg)](https://openjdk.org/)
+[![JavaFX](https://img.shields.io/badge/JavaFX-27-blue.svg)](https://openjfx.io/)
+[![Maven](https://img.shields.io/badge/Build-Maven-red.svg)](https://maven.apache.org/)
+[![JUnit](https://img.shields.io/badge/Test-JUnit%205-green.svg)](https://junit.org/junit5/)
+[![GitHub stars](https://img.shields.io/github/stars/beihaime/ChineseChess?style=social)](https://github.com/beihaime/ChineseChess/stargazers)
+
 A complete Chinese Chess (Xiangqi) game written in Java, featuring a clean architecture, full rule engine, JavaFX GUI, and unit tests.
 
 一个用 Java 实现的完整中国象棋游戏，具备清晰架构、完整规则引擎、JavaFX 图形界面与单元测试。
