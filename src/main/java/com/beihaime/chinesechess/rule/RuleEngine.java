@@ -16,10 +16,10 @@ public class RuleEngine {
         if (from.equals(to)) {
             return false;
         }
-        if (target != null && target.getSide() == self.getSide()) {
+        if (target != null && target.side() == self.side()) {
             return false;
         }
-        switch (self.getPieceType()) {
+        switch (self.pieceType()) {
             case ROOK:
                 return rookCheck(board, from, to);
             case HORSE:
@@ -47,8 +47,8 @@ public class RuleEngine {
                 if (piece == null) {
                     continue;
                 }
-                if (piece.getPieceType() == PieceType.GENERAL &&
-                        piece.getSide() == side) {
+                if (piece.pieceType() == PieceType.GENERAL &&
+                        piece.side() == side) {
                     generalPosition = new Position(x, y);
                 }
             }
@@ -62,7 +62,7 @@ public class RuleEngine {
                 if (piece == null) {
                     continue;
                 }
-                if (piece.getSide() == side) {
+                if (piece.side() == side) {
                     continue;
                 }
                 Position attackPosition = new Position(x, y);
@@ -83,7 +83,7 @@ public class RuleEngine {
         Piece capturedPiece = board.getPiece(to);
         board.movePiece(from, to);
         boolean facing = generalsFacing(board);
-        boolean isInCheck = isInCheck(board , movingPiece.getSide());
+        boolean isInCheck = isInCheck(board , movingPiece.side());
         board.removePiece(to);
         board.setPiece(from,movingPiece);
         if (capturedPiece != null) {
@@ -100,7 +100,7 @@ public class RuleEngine {
                 if (piece == null) {
                     continue;
                 }
-                if (piece.getSide() != side) {
+                if (piece.side() != side) {
                     continue;
                 }
                 Position from = new Position(x, y);
@@ -188,13 +188,13 @@ public class RuleEngine {
         }
         //Elephant cannot cross river
         if (bottomSide.equals(Side.RED)) {
-            if (self.getSide() == Side.BLACK && to.y() >= river
-                    || self.getSide() == Side.RED && to.y() < river) {
+            if (self.side() == Side.BLACK && to.y() >= river
+                    || self.side() == Side.RED && to.y() < river) {
                 return false;
             }
         } else if (bottomSide.equals(Side.BLACK)) {
-            if (self.getSide() == Side.BLACK && to.y() <= river
-                    || self.getSide() == Side.RED && to.y() > river) {
+            if (self.side() == Side.BLACK && to.y() <= river
+                    || self.side() == Side.RED && to.y() > river) {
                 return false;
             }
         }
@@ -215,12 +215,12 @@ public class RuleEngine {
             return false;
         }
         //Black area
-        if (self.getSide() == Side.BLACK && bottomSide.equals(Side.BLACK) &&
+        if (self.side() == Side.BLACK && bottomSide.equals(Side.BLACK) &&
                 (to.y() < 7 || to.y() > 9)) {
             return false;
         }
         //Red area
-        return self.getSide() != Side.RED || !bottomSide.equals(Side.RED) || to.y() >= 7;
+        return self.side() != Side.RED || !bottomSide.equals(Side.RED) || to.y() >= 7;
     }
 
     private boolean generalsFacing(Board board) {
@@ -232,11 +232,11 @@ public class RuleEngine {
                 if (piece == null) {
                     continue;
                 }
-                if (piece.getPieceType() == PieceType.GENERAL) {
-                    if (piece.getSide() == Side.BLACK) {
+                if (piece.pieceType() == PieceType.GENERAL) {
+                    if (piece.side() == Side.BLACK) {
                         blackGeneral = new Position(x, y);
                     }
-                    if (piece.getSide() == Side.RED) {
+                    if (piece.side() == Side.RED) {
                         redGeneral = new Position(x, y);
                     }
                 }
@@ -281,12 +281,12 @@ public class RuleEngine {
             return false;
         }
         //Black area
-        if (self.getSide() == Side.BLACK && bottomSide.equals(Side.BLACK) &&
+        if (self.side() == Side.BLACK && bottomSide.equals(Side.BLACK) &&
                 (to.y() < 7 || to.y() > 9)) {
             return false;
         }
         //Red area
-        return self.getSide() != Side.RED || !bottomSide.equals(Side.RED) || to.y() >= 7;
+        return self.side() != Side.RED || !bottomSide.equals(Side.RED) || to.y() >= 7;
     }
 
     private boolean cannonCheck(Board board, Position from, Position to) {
@@ -327,23 +327,23 @@ public class RuleEngine {
         int dy = to.y() - from.y();
         boolean sideways = dx == 1 && dy == 0;
         boolean forward = dx == 0 && (
-                (self.getSide() == Side.BLACK && dy == 1) ||
-                        (self.getSide() == Side.RED && dy == -1));
+                (self.side() == Side.BLACK && dy == 1) ||
+                        (self.side() == Side.RED && dy == -1));
         if (bottomSide == Side.BLACK) {
             forward = dx == 0 && (
-                    (self.getSide() == Side.BLACK && dy == -1) ||
-                            (self.getSide() == Side.RED && dy == 1));
+                    (self.side() == Side.BLACK && dy == -1) ||
+                            (self.side() == Side.RED && dy == 1));
         }
         //Pawn cannot move sideways before crossing the river
         boolean crossedRiver = false;
         int river = 5;
-        if (self.getSide() == Side.RED && bottomSide.equals(Side.RED)) {
+        if (self.side() == Side.RED && bottomSide.equals(Side.RED)) {
             crossedRiver = from.y() < river;
-        } else if (self.getSide() == Side.RED && bottomSide.equals(Side.BLACK)) {
+        } else if (self.side() == Side.RED && bottomSide.equals(Side.BLACK)) {
             crossedRiver = from.y() >= river;
-        } else if (self.getSide() == Side.BLACK && bottomSide.equals(Side.RED)) {
+        } else if (self.side() == Side.BLACK && bottomSide.equals(Side.RED)) {
             crossedRiver = from.y() >= river;
-        } else if (self.getSide() == Side.BLACK && bottomSide.equals(Side.BLACK)) {
+        } else if (self.side() == Side.BLACK && bottomSide.equals(Side.BLACK)) {
             crossedRiver = from.y() < river;
         }
 

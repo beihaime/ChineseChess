@@ -20,12 +20,17 @@ public class ChessBoardView extends Canvas {
     private final Board board;
     private final SoundManager soundManager = new SoundManager();
     private Position selectedPosition;
+    private Runnable onGameStateChanged;
     private static final double PIECE_SIZE = 34;
     private static final double SPACING = 40;
     private double getStartX() {return (getWidth() - 8 * SPACING) / 2;}
     private double getStartY() {return (getHeight() - 9 * SPACING) / 2;}
     private double getRightX() {return getStartX() + 8 * SPACING;}
     private double getBottomY() {return getStartY() + 9 * SPACING;}
+
+    public void setOnGameStateChanged(Runnable callback) {
+        this.onGameStateChanged = callback;
+    }
 
     public ChessBoardView(double width, double height, Game game) {
         super(width, height);
@@ -46,7 +51,7 @@ public class ChessBoardView extends Canvas {
                 if (clickedPiece == null) {
                     return;
                 }
-                if (clickedPiece.getSide() != game.getCurrentTurn()) {
+                if (clickedPiece.side() != game.getCurrentTurn()) {
                     return;
                 }
                 //First choose
@@ -55,7 +60,7 @@ public class ChessBoardView extends Canvas {
                 soundManager.playSelect(0.5);
                 System.out.println("Selected: " + selectedPosition);
             } else {
-                if (clickedPiece != null && clickedPiece.getSide() == game.getCurrentTurn()) {
+                if (clickedPiece != null && clickedPiece.side() == game.getCurrentTurn()) {
                     selectedPosition = clickedPosition;
                     //Rechoose
                     System.out.println("Reselected: " + selectedPosition);
@@ -69,6 +74,9 @@ public class ChessBoardView extends Canvas {
                     soundManager.playMove(0.6);
                     selectedPosition = null;
                     refresh();
+                    if (onGameStateChanged != null) {
+                        onGameStateChanged.run();
+                    }
                 }
             }
         });
@@ -139,7 +147,7 @@ public class ChessBoardView extends Canvas {
                         drawHint(selectedPosition,Color.GREEN);
                     }
                     //PieceColor
-                    if (piece.getSide() == Side.RED) {
+                    if (piece.side() == Side.RED) {
                         gc.setStroke(Color.RED);
                         gc.setFill(Color.RED);
                     } else {
@@ -173,10 +181,10 @@ public class ChessBoardView extends Canvas {
         GraphicsContext gc = getGraphicsContext2D();
         gc.setStroke(color);
         gc.strokeOval(
-                screenX - PIECE_SIZE / 2 - 4,
-                screenY - PIECE_SIZE / 2 - 4,
-                PIECE_SIZE + 8,
-                PIECE_SIZE + 8
+                screenX - PIECE_SIZE / 2,
+                screenY - PIECE_SIZE / 2 ,
+                PIECE_SIZE,
+                PIECE_SIZE
         );
     }
 

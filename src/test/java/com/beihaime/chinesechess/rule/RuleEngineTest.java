@@ -1,7 +1,5 @@
 package com.beihaime.chinesechess.rule;
 
-import com.beihaime.chinesechess.game.Game;
-import com.beihaime.chinesechess.game.MoveResult;
 import com.beihaime.chinesechess.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

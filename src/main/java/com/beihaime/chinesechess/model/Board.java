@@ -2,8 +2,7 @@ package com.beihaime.chinesechess.model;
 
 public class Board {
     private final Piece[][] pieces = new Piece[9][10];
-    private final Side bottomSide = Side.BLACK;
-
+    private final Side bottomSide = Side.RED;
     public boolean isInsideBoard(Position position) {
         return position.x() >= 0
                 && position.y() >= 0

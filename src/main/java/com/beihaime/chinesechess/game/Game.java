@@ -64,7 +64,7 @@ public class Game {
         if(piece == null){
             return MoveResult.NO_PIECE;
         }
-        if (piece.getSide() != currentTurn) {
+        if (piece.side() != currentTurn) {
             return MoveResult.NOT_YOUR_TURN;
         }
         if (!ruleEngine.isLegalMove(board, from, to)) {
