@@ -1,0 +1,71 @@
+
+name: Build Windows Installer
+
+on:
+  workflow_dispatch:
+
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Setup WiX
+        run: dotnet tool install --global wix
+
+      - name: Add WiX to PATH
+        shell: pwsh
+        run: |
+          echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Prepare application
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force target/package-input
+          Copy-Item target/ChineseChess-1.0-SNAPSHOT.jar target/package-input/
+
+      - name: Package EXE
+        shell: pwsh
+        run: |
+          jpackage `
+            --type exe `
+            --name ChineseChess `
+            --app-version 1.0.0 `
+            --vendor "Beihaime" `
+            --input target/package-input `
+            --main-jar ChineseChess-1.0-SNAPSHOT.jar `
+            --main-class com.beihaime.chinesechess.Main `
+            --dest target/installer `
+            --win-menu `
+            --win-shortcut
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChineseChess-Windows-Installer
+          path: target/installer/*.exe
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/installer/*.exe
