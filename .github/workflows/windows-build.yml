@@ -27,7 +27,12 @@ jobs:
           cache: maven
 
       - name: Setup WiX
-        run: dotnet tool install --global wix
+        shell: pwsh
+        run: |
+          dotnet tool install --global wix --version 5.0.2
+          
+          wix extension add --global WixToolset.Util.wixext/5.0.2
+          wix extension add --global WixToolset.UI.wixext/5.0.2
 
       - name: Add WiX to PATH
         shell: pwsh
