@@ -2,8 +2,7 @@
 #            Discover all capabilities of Qodana in our documentation           #
 #             https://www.jetbrains.com/help/qodana/about-qodana.html           #
 #-------------------------------------------------------------------------------#
-
-name: Qodana
+name: ChineseChess Code Quality
 on:
   workflow_dispatch:
   pull_request:
