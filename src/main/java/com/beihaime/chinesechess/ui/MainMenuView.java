@@ -29,9 +29,14 @@ public class MainMenuView {
 
         root.getStyleClass().add("main-container");
 
-        Button button = new Button("Start");
-        button.setOnAction(event -> {
+        Button buttonOffline = new Button("Offline Game");
+        buttonOffline.setOnAction(event -> {
             ChessApplication.chess(stage);
+        });
+
+        Button buttonOnline = new Button("Online Game");
+        buttonOnline.setOnAction(event -> {
+            System.out.println("Starting Game online");
         });
 
         Label label = new Label("中国象棋");
@@ -47,11 +52,10 @@ public class MainMenuView {
 
         scene.getStylesheets().add(css.toExternalForm());
 
-        button.getStyleClass().add("start-button");
-        button.setPrefWidth(200);
-        button.setPrefHeight(60);
+        buttonOffline.getStyleClass().add("start-button");
+        buttonOnline.getStyleClass().add("start-button");
 
-        menu.getChildren().addAll(button);
+        menu.getChildren().addAll(buttonOffline, buttonOnline);
 
         root.setTop(label);
         root.setCenter(menu);
