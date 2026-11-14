@@ -13,11 +13,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
+import java.net.URL;
 
 
 public class ChessBoardView extends Canvas {
     private final Game game;
     private final Board board;
+    private final URL css = getClass().getResource("/css/board.css");
     private final SoundManager soundManager = new SoundManager();
     private Position selectedPosition;
     private Runnable onGameStateChanged;
@@ -58,18 +60,15 @@ public class ChessBoardView extends Canvas {
                 selectedPosition = clickedPosition;
                 refresh();
                 soundManager.playSelect(0.5);
-                System.out.println("Selected: " + selectedPosition);
             } else {
                 if (clickedPiece != null && clickedPiece.side() == game.getCurrentTurn()) {
                     selectedPosition = clickedPosition;
                     //Rechoose
-                    System.out.println("Reselected: " + selectedPosition);
                     soundManager.playSelect(0.5);
                     refresh();
                     return;
                 }
                 MoveResult result = game.move(selectedPosition, clickedPosition);
-                System.out.println("MoveResult: " + result);
                 if (result == MoveResult.SUCCESS) {
                     soundManager.playMove(0.6);
                     selectedPosition = null;
@@ -181,10 +180,10 @@ public class ChessBoardView extends Canvas {
         GraphicsContext gc = getGraphicsContext2D();
         gc.setStroke(color);
         gc.strokeOval(
-                screenX - PIECE_SIZE / 2,
-                screenY - PIECE_SIZE / 2 ,
-                PIECE_SIZE,
-                PIECE_SIZE
+                screenX - PIECE_SIZE / 2 - 2,
+                screenY - PIECE_SIZE / 2 - 2,
+                PIECE_SIZE + 4,
+                PIECE_SIZE + 4
         );
     }
 

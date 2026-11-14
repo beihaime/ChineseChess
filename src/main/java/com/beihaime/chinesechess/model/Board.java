@@ -24,7 +24,6 @@ public class Board {
 
     public void movePiece(Position from, Position to) {
         Piece originalPieces = getPiece(from);
-        Piece newPieces = getPiece(to);
         if(originalPieces == null){
             return;
         }
