@@ -90,12 +90,11 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          # On tag push use the tag; on manual dispatch use a generated tag
-          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('windows-installer-{0}', github.run_number) }}
-          name: ${{ github.ref_type == 'tag' && format('ChineseChess {0}', github.ref_name) || format('Windows Installer #{0}', github.run_number) }}
+          tag_name: windows-installer-${{ github.run_number }}
+          name: Windows Installer #${{ github.run_number }}
           body: |
             Chinese Chess Windows Installer
-            
+
             - Built from commit: ${{ github.sha }}
             - Workflow run: ${{ github.run_id }}
           files: target/installer/*.exe
