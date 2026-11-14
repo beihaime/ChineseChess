@@ -32,13 +32,19 @@ jobs:
           $wixZip = "$env:RUNNER_TEMP\wix311.zip"
           $wixDir = "$env:RUNNER_TEMP\wix311"
           
+          Write-Host "Downloading WiX 3.11..."
           Invoke-WebRequest -Uri $wixUrl -OutFile $wixZip
           Expand-Archive -Path $wixZip -DestinationPath $wixDir -Force
           
-          # Add WiX 3.11 to PATH
-          echo "$wixDir" >> $env:GITHUB_PATH
+          # Put WiX 3.11 at the FRONT of PATH so jpackage prefers it
+          echo "$wixDir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           
-          # Verify
+          # Also set for current process
+          $env:PATH = "$wixDir;$env:PATH"
+          
+          Write-Host "WiX tools:"
+          Get-Command candle.exe, light.exe, wix.exe -ErrorAction SilentlyContinue | Format-Table Name, Source
+          
           & "$wixDir\candle.exe" -?
 
       - name: Build with Maven
@@ -53,6 +59,12 @@ jobs:
       - name: Package EXE
         shell: pwsh
         run: |
+          Write-Host "Current PATH (first few):"
+          $env:PATH -split ';' | Select-Object -First 5
+          
+          Write-Host "Which wix/candle:"
+          Get-Command wix.exe, candle.exe -ErrorAction SilentlyContinue | Format-Table Name, Source
+          
           jpackage `
             --verbose `
             --type exe `
