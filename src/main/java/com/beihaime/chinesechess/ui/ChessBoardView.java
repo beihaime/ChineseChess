@@ -13,13 +13,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
-import java.net.URL;
-
 
 public class ChessBoardView extends Canvas {
     private final Game game;
     private final Board board;
-    private final URL css = getClass().getResource("/css/board.css");
     private final SoundManager soundManager = new SoundManager();
     private Position selectedPosition;
     private Runnable onGameStateChanged;
