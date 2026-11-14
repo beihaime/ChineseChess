@@ -1,4 +1,3 @@
-
 name: Build Windows Installer
 
 on:
@@ -51,17 +50,23 @@ jobs:
       - name: Package EXE
         shell: pwsh
         run: |
+          wix --version
+          
           jpackage `
+            --verbose `
             --type exe `
             --name ChineseChess `
             --app-version 1.0.0 `
             --vendor "Beihaime" `
+            --description "Chinese Chess (Xiangqi)" `
             --input target/package-input `
             --main-jar ChineseChess-1.0-SNAPSHOT.jar `
             --main-class com.beihaime.chinesechess.Main `
             --dest target/installer `
             --win-menu `
-            --win-shortcut
+            --win-shortcut `
+            --win-dir-chooser `
+            --java-options "-Dfile.encoding=UTF-8"
 
       - name: Upload installer
         uses: actions/upload-artifact@v4
