@@ -25,18 +25,21 @@ jobs:
           java-version: '25'
           cache: maven
 
-      - name: Setup WiX
+      - name: Setup WiX 3.11
         shell: pwsh
         run: |
-          dotnet tool install --global wix --version 5.0.2
+          $wixUrl = "https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip"
+          $wixZip = "$env:RUNNER_TEMP\wix311.zip"
+          $wixDir = "$env:RUNNER_TEMP\wix311"
           
-          wix extension add --global WixToolset.Util.wixext/5.0.2
-          wix extension add --global WixToolset.UI.wixext/5.0.2
-
-      - name: Add WiX to PATH
-        shell: pwsh
-        run: |
-          echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
+          Invoke-WebRequest -Uri $wixUrl -OutFile $wixZip
+          Expand-Archive -Path $wixZip -DestinationPath $wixDir -Force
+          
+          # Add WiX 3.11 to PATH
+          echo "$wixDir" >> $env:GITHUB_PATH
+          
+          # Verify
+          & "$wixDir\candle.exe" -?
 
       - name: Build with Maven
         run: mvn clean package
@@ -50,8 +53,6 @@ jobs:
       - name: Package EXE
         shell: pwsh
         run: |
-          wix --version
-          
           jpackage `
             --verbose `
             --type exe `
