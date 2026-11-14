@@ -11,12 +11,13 @@ import java.net.URL;
 public class ChessGameView {
     private static final double WINDOW_WIDTH = 1000;
     private static final double WINDOW_HEIGHT = 700;
-    private final URL css = getClass().getResource("/css/chess.css");
+    private static final String CSS_PATH = "/css/chess.css";
+
 
     public ChessGameView(Stage stage) {
         Game game = new Game();
         BorderPane root = new BorderPane();
-
+        URL css = this.getClass().getResource(CSS_PATH);
 
         root.getStyleClass().add("main-container");
 

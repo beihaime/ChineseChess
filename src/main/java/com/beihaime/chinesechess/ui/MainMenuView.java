@@ -13,9 +13,10 @@ import java.net.URL;
 public class MainMenuView {
     private static final double WINDOW_WIDTH = 1000;
     private static final double WINDOW_HEIGHT = 700;
-    private final URL css = getClass().getResource("/css/chess.css");
+    private static final String CSS_PATH = "/css/chess.css";
 
     public MainMenuView(Stage stage) {
+        URL css = getClass().getResource(CSS_PATH);
         stage.setTitle("Chinese Chess");
         stage.setWidth(WINDOW_WIDTH);
         stage.setHeight(WINDOW_HEIGHT);
