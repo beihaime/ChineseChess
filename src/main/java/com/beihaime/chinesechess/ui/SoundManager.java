@@ -4,25 +4,30 @@ import javafx.scene.media.AudioClip;
 import java.net.URL;
 
 public class SoundManager {
-
     private final AudioClip selectSound;
     private final AudioClip moveSound;
 
-    public SoundManager(){
+    public SoundManager() {
         selectSound = loadSound("/sounds/select.wav");
         moveSound = loadSound("/sounds/select.wav");
     }
 
-    private AudioClip loadSound(String path){
-        URL rescource = getClass().getResource(path);
-        if(rescource == null){
-            throw new IllegalStateException("Sound resource not found!" + path);
+    private AudioClip loadSound(String path) {
+        URL resource = getClass().getResource(path);
+
+        if (resource == null) {
+            throw new IllegalStateException(
+                    "Sound resource not found: " + path
+            );
         }
-        return new AudioClip(rescource.toString());
+
+        return new AudioClip(resource.toExternalForm());
     }
+
     public void playSelect(double volume) {
         selectSound.play(volume);
     }
+
     public void playMove(double volume) {
         moveSound.play(volume);
     }

@@ -61,6 +61,13 @@
     -fx-padding: 6px 10px;
 }
 
+/* Undo button */
+.undo-button {
+    -fx-pref-width: 80px;
+    -fx-pref-height: 40px;
+    -fx-padding: 6px 10px;
+}
+
 /* Labels */
 .label {
     -fx-text-fill: #3B3028;

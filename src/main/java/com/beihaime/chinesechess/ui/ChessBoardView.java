@@ -50,6 +50,7 @@ public class ChessBoardView extends Canvas {
             if (Math.hypot(distanceX, distanceY) > PIECE_SIZE / 2 + 4) {
                 return;
             }
+
             Position clickedPosition = new Position(x, y);
             Piece clickedPiece = board.getPiece(clickedPosition);
             if (selectedPosition == null) {
@@ -65,8 +66,12 @@ public class ChessBoardView extends Canvas {
                 soundManager.playSelect(0.5);
             } else {
                 if (clickedPiece != null && clickedPiece.side() == game.getCurrentTurn()) {
-                    selectedPosition = clickedPosition;
-                    //Rechoose
+                    if (clickedPosition.equals(selectedPosition)) {
+                        selectedPosition = null;
+                    } else {
+                        selectedPosition = clickedPosition;
+                    }
+
                     soundManager.playSelect(0.5);
                     refresh();
                     return;
@@ -198,5 +203,9 @@ public class ChessBoardView extends Canvas {
         drawBoard();
         drawPieces();
         drawHints();
+    }
+
+    public final Game getGame() {
+        return game;
     }
 }

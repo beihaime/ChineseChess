@@ -1,9 +1,11 @@
 package com.beihaime.chinesechess.ui;
 
 import com.beihaime.chinesechess.game.Game;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -17,6 +19,8 @@ public class ChessGameView {
     public ChessGameView(Stage stage) {
         Game game = new Game();
         BorderPane root = new BorderPane();
+        HBox menu = new HBox(15);
+        menu.setAlignment(Pos.CENTER_LEFT);
         URL css = this.getClass().getResource(CSS_PATH);
 
         root.getStyleClass().add("main-container");
@@ -26,10 +30,21 @@ public class ChessGameView {
         boardView.setHeight(500);
         boardView.getStyleClass().add("board-container");
 
+        ChessInfoPanel infoPanel = new ChessInfoPanel(game);
+
         Button buttonQuit = new Button("Quit");
         buttonQuit.getStyleClass().add("quit-button");
         buttonQuit.setOnAction(event -> {
             ChessApplication.mainMenu(stage);
+        });
+
+        Button buttonUndo = new Button("Undo");
+        buttonUndo.getStyleClass().add("undo-button");
+        buttonUndo.setOnAction(event -> {
+            game.undo();
+            boardView.refresh();
+            infoPanel.updateStatus();
+
         });
         Scene scene = new Scene(root, 850 ,WINDOW_HEIGHT);
         if (css == null) {
@@ -43,7 +58,6 @@ public class ChessGameView {
         stage.setMinWidth(900);
         stage.setMinHeight(650);
 
-        ChessInfoPanel infoPanel = new ChessInfoPanel(game);
 
         boardView.setOnGameStateChanged(infoPanel::updateStatus);
 
@@ -51,9 +65,11 @@ public class ChessGameView {
         infoPanel.setPrefHeight(180);
         infoPanel.setMaxWidth(260);
 
+        menu.getChildren().addAll(buttonQuit, buttonUndo);
+
         root.setLeft(boardView);
         root.setRight(infoPanel);
-        root.setBottom(buttonQuit);
+        root.setBottom(menu);
 
         stage.setScene(scene);
         stage.show();
