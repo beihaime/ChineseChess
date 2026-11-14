@@ -46,7 +46,7 @@ public class RuleEngine {
         ArrayList<Position> legalMoves = new ArrayList<>();
         PieceType pieceType = board.getPiece(selectedPosition).pieceType();
         switch (pieceType) {
-            case ROOK -> {
+            case ROOK,CANNON -> {
                 int x = selectedPosition.x();
                 int y = selectedPosition.y();
                 for (int startX = 0; startX < 9; startX++) {
