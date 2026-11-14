@@ -115,6 +115,10 @@ public class Game {
         return ruleEngine.isInCheck(board, currentTurn);
     }
 
+    public List<Position> getLegalMoves(Position position) {
+        return ruleEngine.getLegalMoves(board, position);
+    }
+
     public boolean isGameOver() {
         GameStatus status = getStatus();
         return status == GameStatus.CHECKMATE || status == GameStatus.STALEMATE;

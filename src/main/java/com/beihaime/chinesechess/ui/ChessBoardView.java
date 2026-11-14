@@ -13,7 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
-
 public class ChessBoardView extends Canvas {
     private final Game game;
     private final Board board;
@@ -41,7 +40,14 @@ public class ChessBoardView extends Canvas {
             double mouseY = event.getY();
             int x = (int) Math.round((mouseX - getStartX()) / SPACING);
             int y = (int) Math.round((mouseY - getStartY()) / SPACING);
+
             if (x < 0 || x > 8 || y < 0 || y > 9) {
+                return;
+            }
+
+            double distanceX = Math.abs(mouseX - (getStartX() + x * SPACING));
+            double distanceY = Math.abs(mouseY - (getStartY() + y * SPACING));
+            if (Math.hypot(distanceX, distanceY) > PIECE_SIZE / 2 + 4) {
                 return;
             }
             Position clickedPosition = new Position(x, y);
@@ -137,11 +143,6 @@ public class ChessBoardView extends Canvas {
                 if (piece != null){
                     double screenX = getStartX() + x * SPACING;
                     double screenY = getStartY() + y * SPACING;
-                    //Highlight selected piece
-                    if (position.equals(selectedPosition)) {
-                        drawHighlight(screenX, screenY ,Color.YELLOW);
-                        drawHint(selectedPosition,Color.GREEN);
-                    }
                     //PieceColor
                     if (piece.side() == Side.RED) {
                         gc.setStroke(Color.RED);
@@ -159,18 +160,25 @@ public class ChessBoardView extends Canvas {
         }
     }
 
-    public void drawHint(Position selectedPosition , Color color) {
-        for (int y = 0; y < 10; y++) {
-            for(int x = 0; x < 9; x++){
-                Position capturePosition = new Position(x, y);
-                double screenX = getStartX() + x * SPACING;
-                double screenY = getStartY() + y * SPACING;
-                if (game.move(selectedPosition , capturePosition) == MoveResult.SUCCESS) {
-                    drawHighlight(screenX, screenY,color);
-                    game.undo();
-                }
-            }
+    public double getScreenX(int x) {
+        return getStartX() + x * SPACING;
+    }
+
+    public double getScreenY(int y) {
+        return getStartY() + y * SPACING;
+    }
+
+    public void drawHints() {
+        if (selectedPosition == null){
+            return;
         }
+        drawHighlight(getScreenX(selectedPosition.x()),getScreenY(selectedPosition.y()),Color.YELLOW);
+        drawLegalMoves(selectedPosition, Color.GREEN);
+    }
+
+    public void drawLegalMoves(Position selectedPosition , Color color) {
+        game.getLegalMoves(selectedPosition).forEach(
+                legalMove -> {drawHighlight( getScreenX(legalMove.x()),getScreenY(legalMove.y()) ,color);});
     }
 
     public void drawHighlight(double screenX, double screenY,Color color) {
@@ -189,5 +197,6 @@ public class ChessBoardView extends Canvas {
         gc.clearRect(0, 0, getWidth(), getHeight());
         drawBoard();
         drawPieces();
+        drawHints();
     }
 }

@@ -2,6 +2,9 @@ package com.beihaime.chinesechess.rule;
 
 import com.beihaime.chinesechess.model.*;
 
+import java.util.ArrayList;
+
+
 public class RuleEngine {
     private boolean isBasicLegalMove(Board board, Position from, Position to) {
         //Piece area valid check
@@ -37,6 +40,46 @@ public class RuleEngine {
             default:
                 return false;
         }
+    }
+
+    public ArrayList<Position> getLegalMoves(Board board,Position selectedPosition){
+        ArrayList<Position> legalMoves = new ArrayList<>();
+        PieceType pieceType = board.getPiece(selectedPosition).pieceType();
+        switch (pieceType) {
+            case ROOK -> {
+                int x = selectedPosition.x();
+                int y = selectedPosition.y();
+                for (int startX = 0; startX < 9; startX++) {
+                    if (isLegalMove(board, selectedPosition, new Position(startX, y))) {
+                        legalMoves.add(new Position(startX, y));
+                    }
+                }
+                for (int startY = 0; startY < 10; startY++) {
+                    if (isLegalMove(board, selectedPosition, new Position(x, startY))) {
+                        legalMoves.add(new Position(x, startY));
+                    }
+                }
+            }
+            case HORSE,ELEPHANT -> {
+                for (int x = selectedPosition.x() - 2;  x <= selectedPosition.x() + 2; x++) {
+                    for (int y = selectedPosition.y() - 2;  y <= selectedPosition.y() + 2; y++) {
+                        if (isLegalMove(board , selectedPosition , new Position(x, y))) {
+                            legalMoves.add(new Position(x, y));
+                        }
+                    }
+                }
+            }
+            case PAWN,GENERAL,ADVISOR -> {
+                for (int x = selectedPosition.x() - 1;  x <= selectedPosition.x() + 1; x++) {
+                    for (int y = selectedPosition.y() - 1;  y <= selectedPosition.y() + 1; y++) {
+                        if (isLegalMove(board , selectedPosition , new Position(x, y))) {
+                            legalMoves.add(new Position(x, y));
+                        }
+                    }
+                }
+            }
+        }
+        return legalMoves;
     }
 
     public boolean isInCheck(Board board, Side side) {
