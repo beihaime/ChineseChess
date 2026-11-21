@@ -7,6 +7,7 @@ import com.beihaime.chinesechess.model.Piece;
 import com.beihaime.chinesechess.model.Position;
 import com.beihaime.chinesechess.model.Side;
 import com.beihaime.chinesechess.ui.manager.SoundManager;
+import com.beihaime.chinesechess.ui.theme.ChessColor;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -92,8 +93,8 @@ public class ChessBoardView extends Canvas {
 
     private void drawBoard() {
         GraphicsContext gc = getGraphicsContext2D();
-        gc.setStroke(Color.BLACK);
-        gc.setFill(Color.BEIGE);
+        gc.setStroke(ChessColor.BOARD_LINE);
+        gc.setFill(ChessColor.BOARD_SURFACE);
         gc.fillRect(
                 getStartX() - 20,
                 getStartY() -20,
@@ -129,12 +130,12 @@ public class ChessBoardView extends Canvas {
         //Diagonal-Down
         gc.strokeLine(getStartX()+ 3 *SPACING, getBottomY() ,getStartX() + 5 * SPACING, getBottomY() - 2 * SPACING);
         gc.strokeLine(getStartX()+ 5 *SPACING, getBottomY() ,getStartX() + 3 * SPACING, getBottomY() - 2 * SPACING);
-        gc.setFill(Color.BLACK);
+        gc.setFill(ChessColor.TEXT_PRIMARY);
         gc.setFont(Font.font("Noto Sans CJK SC", 35));
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
-        gc.fillText("楚河", getStartX() + 2 * SPACING, getStartY() + 4.5 * SPACING);
-        gc.fillText("汉界", getStartX() + 6 * SPACING, getStartY() + 4.5 * SPACING);
+        gc.fillText("楚河", getStartX() + 2 * SPACING, getStartY() + 4.45 * SPACING);
+        gc.fillText("汉界", getStartX() + 6 * SPACING, getStartY() + 4.45 * SPACING);
     }
 
     private void drawPieces() {
@@ -151,11 +152,11 @@ public class ChessBoardView extends Canvas {
                     double screenY = getStartY() + y * SPACING;
                     //PieceColor
                     if (piece.side() == Side.RED) {
-                        gc.setStroke(Color.RED);
-                        gc.setFill(Color.RED);
+                        gc.setStroke(ChessColor.RED_PIECE);
+                        gc.setFill(ChessColor.RED_PIECE);
                     } else {
-                        gc.setStroke(Color.BLACK);
-                        gc.setFill(Color.BLACK);
+                        gc.setStroke(ChessColor.BLACK_PIECE);
+                        gc.setFill(ChessColor.BLACK_PIECE);
                     }
                     //PieceShape
                     gc.strokeOval(screenX - PIECE_SIZE/2, screenY - PIECE_SIZE/2, PIECE_SIZE, PIECE_SIZE);
@@ -178,8 +179,8 @@ public class ChessBoardView extends Canvas {
         if (selectedPosition == null){
             return;
         }
-        drawHighlight(getScreenX(selectedPosition.x()),getScreenY(selectedPosition.y()),Color.YELLOW);
-        drawLegalMoves(selectedPosition, Color.GREEN);
+        drawHighlight(getScreenX(selectedPosition.x()),getScreenY(selectedPosition.y()), ChessColor.SELECTED);
+        drawLegalMoves(selectedPosition, ChessColor.LEGAL_MOVE);
     }
 
     public void drawLegalMoves(Position selectedPosition , Color color) {

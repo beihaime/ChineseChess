@@ -1,21 +1,56 @@
+/* ========================================
+   Theme Colors
+   ======================================== */
 
-/* Global background */
 .root {
-    -fx-background-color: #E8DCC8;
+    /* Background */
+    primary-background: #E8DCC8;
+    board-frame: #795548;
+    board-surface: #F4EBDD;
+
+    /* Text */
+    text-primary: #3B3028;
+    text-secondary: #75665A;
+    text-light: #FFFFFF;
+
+    /* Buttons */
+    button-primary: #795548;
+    button-hover: #5D4037;
+    button-pressed: #4E342E;
+
+    /* Chess Pieces */
+    red-piece: #B83232;
+    black-piece: #252525;
+
+    /* Interaction */
+    selected-color: #D9A441;
+    legal-move-color: #6D9565;
+
+    /* Application */
+    -fx-background-color: primary-background;
     -fx-font-family: "Noto Sans CJK SC";
 }
 
-/* Main application container */
+
+/* ========================================
+   Main Application
+   ======================================== */
+
 .main-container {
-    -fx-background-color: #E8DCC8;
+    -fx-background-color: primary-background;
     -fx-padding: 24px;
 }
 
-/* Chessboard frame */
+
+/* ========================================
+   Chessboard
+   ======================================== */
+
 .board-container {
-    -fx-background-color: #795548;
+    -fx-background-color: board-frame;
     -fx-padding: 12px;
     -fx-background-radius: 8px;
+
     -fx-effect: dropshadow(
             gaussian,
             rgba(50, 30, 15, 0.25),
@@ -23,61 +58,69 @@
     );
 }
 
-/* Control panel */
+
+/* ========================================
+   Control Panel
+   ======================================== */
+
 .control-panel {
-    -fx-background-color: #F4EBDD;
+    -fx-background-color: board-surface;
     -fx-background-radius: 10px;
     -fx-padding: 18px;
     -fx-spacing: 12px;
 }
 
-/* Common buttons */
+
+/* ========================================
+   Common Buttons
+   ======================================== */
+
 .button {
-    -fx-background-color: #795548;
-    -fx-text-fill: #FFFFFF;
+    -fx-background-color: button-primary;
+    -fx-text-fill: text-light;
     -fx-background-radius: 6px;
     -fx-padding: 9px 18px;
     -fx-cursor: hand;
 }
 
 .button:hover {
-    -fx-background-color: #5D4037;
+    -fx-background-color: button-hover;
 }
 
 .button:pressed {
-    -fx-background-color: #4E342E;
+    -fx-background-color: button-pressed;
 }
 
-/* Start button */
+
+/* ========================================
+   Start Button
+   ======================================== */
+
 .start-button {
     -fx-pref-width: 200px;
     -fx-pref-height: 60px;
 }
 
-/* Quit button */
-.quit-button {
-    -fx-pref-width: 80px;
-    -fx-pref-height: 40px;
-    -fx-padding: 6px 10px;
-}
 
-/* Undo button */
-.undo-button {
-    -fx-pref-width: 80px;
-    -fx-pref-height: 40px;
-    -fx-padding: 6px 10px;
-}
+/* ========================================
+   Control Buttons
+   ======================================== */
 
-/* Redo button */
+.quit-button,
+.undo-button,
 .redo-button {
     -fx-pref-width: 80px;
     -fx-pref-height: 40px;
     -fx-padding: 6px 10px;
 }
 
-/* Labels */
+
+/* ========================================
+   Labels
+   ======================================== */
+
 .label {
-    -fx-text-fill: #3B3028;
+    -fx-text-fill: text-primary;
 }
 
 .title-label {
@@ -85,11 +128,15 @@
     -fx-font-family: "SansSerif";
 }
 
-/* Chess pieces */
+
+/* ========================================
+   Chess Pieces
+   ======================================== */
+
 .red-piece {
-    -fx-text-fill: #B83232;
+    -fx-text-fill: red-piece;
 }
 
 .black-piece {
-    -fx-text-fill: #252525;
+    -fx-text-fill: black-piece;
 }
