@@ -94,8 +94,10 @@
 
 /* ========================================
    Start Button
+   QuitGame Button
    ======================================== */
 
+.quitGame-button,
 .start-button {
     -fx-pref-width: 200px;
     -fx-pref-height: 60px;

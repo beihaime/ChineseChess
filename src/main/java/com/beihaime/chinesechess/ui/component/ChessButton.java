@@ -28,4 +28,23 @@ public class ChessButton {
         redo.getStyleClass().add("redo-button");
         return redo;
     }
+
+    public final Button OfflineButton() {
+        Button buttonOffline = new Button("Offline Game");
+        buttonOffline.getStyleClass().add("start-button");
+        return buttonOffline;
+    }
+
+    public final Button OnlineButton() {
+        Button buttonOffline = new Button("Online Game");
+        buttonOffline.getStyleClass().add("start-button");
+        return buttonOffline;
+    }
+
+    public final Button quitGameButton() {
+        Button quit = new Button("QuitGame");
+        quit.getStyleClass().add("quitGame-button");
+        return quit;
+    }
+
 }

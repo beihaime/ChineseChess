@@ -1,6 +1,8 @@
 package com.beihaime.chinesechess.ui.page;
 
 import com.beihaime.chinesechess.ui.ChessApplication;
+import com.beihaime.chinesechess.ui.component.ChessButton;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -29,10 +31,14 @@ public class MainMenuView {
         VBox menu = new VBox(30);
         menu.setAlignment(Pos.CENTER);
 
-
         root.getStyleClass().add("main-container");
 
-        Button buttonOffline = new Button("Offline Game");
+        ChessButton controlPanel = new ChessButton(stage);
+
+        Button buttonOffline = controlPanel.OfflineButton();
+        Button buttonOnline = controlPanel.OnlineButton();
+        Button buttonQuitGame = controlPanel.quitGameButton();
+
         buttonOffline.setOnAction(event -> {
             try {
                 ChessApplication.chess(stage);
@@ -41,9 +47,12 @@ public class MainMenuView {
             }
         });
 
-        Button buttonOnline = new Button("Online Game");
         buttonOnline.setOnAction(event -> {
             System.out.println("Starting Game online");
+        });
+
+        buttonQuitGame.setOnAction(event -> {
+            Platform.exit();
         });
 
         Label label = new Label("中国象棋");
@@ -59,10 +68,7 @@ public class MainMenuView {
 
         scene.getStylesheets().add(css.toExternalForm());
 
-        buttonOffline.getStyleClass().add("start-button");
-        buttonOnline.getStyleClass().add("start-button");
-
-        menu.getChildren().addAll(buttonOffline, buttonOnline);
+        menu.getChildren().addAll(buttonOffline, buttonOnline,buttonQuitGame);
 
         root.setTop(label);
         root.setCenter(menu);
