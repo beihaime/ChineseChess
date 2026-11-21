@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.apache.batik.transcoder.TranscoderException;
 
+import java.io.IOException;
 import java.net.URL;
 
 public class ChessGameView {
@@ -20,7 +21,7 @@ public class ChessGameView {
     private static final double WINDOW_HEIGHT = 700;
     private static final String CSS_PATH = "/css/chess.css";
 
-    public ChessGameView(Stage stage) throws TranscoderException {
+    public ChessGameView(Stage stage) throws TranscoderException, IOException {
         Game game = new Game();
         BorderPane root = new BorderPane();
         HBox menu = new HBox(15);

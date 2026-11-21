@@ -6,6 +6,7 @@ import com.beihaime.chinesechess.model.Board;
 import com.beihaime.chinesechess.model.Piece;
 import com.beihaime.chinesechess.model.Position;
 import com.beihaime.chinesechess.model.Side;
+import com.beihaime.chinesechess.ui.manager.PieceImageManager;
 import com.beihaime.chinesechess.ui.manager.SoundManager;
 import com.beihaime.chinesechess.ui.manager.SvgLoader;
 import com.beihaime.chinesechess.ui.theme.ChessColor;
@@ -18,10 +19,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import org.apache.batik.transcoder.TranscoderException;
 
+import java.io.IOException;
+
 public class ChessBoardView extends Canvas {
     private final Game game;
     private final Board board;
     private final SoundManager soundManager = new SoundManager();
+    private final PieceImageManager pieceImageManager = new PieceImageManager();
     private final SvgLoader svgLoader;
     private final Image pieceSvg;
     private Position selectedPosition;
@@ -30,6 +34,7 @@ public class ChessBoardView extends Canvas {
     private static final double PIECE_SIZE = 36;
     private static final double FRAME_INSET = PIECE_SIZE / 2;
     private static final double SPACING = 42;
+    private static final double imageSize = 1.8;
     private double getStartX() {return (getWidth() - 8 * SPACING) / 2;}
     private double getStartY() {return (getHeight() - 9 * SPACING) / 2;}
     private double getRightX() {return getStartX() + 8 * SPACING;}
@@ -39,12 +44,12 @@ public class ChessBoardView extends Canvas {
         this.onGameStateChanged = callback;
     }
 
-    public ChessBoardView(double width, double height, Game game) throws TranscoderException{
+    public ChessBoardView(double width, double height, Game game) throws TranscoderException, IOException {
         super(width, height);
         this.game = game;
         this.board = game.getBoard();
         this.svgLoader = new SvgLoader();
-        this.pieceSvg = svgLoader.getImage();
+        this.pieceSvg = pieceImageManager.getPieceImage();
 
         refresh();
         setOnMouseClicked(event -> {
@@ -189,7 +194,9 @@ public class ChessBoardView extends Canvas {
                     //PieceShape
                     gc.drawImage(pieceSvg, screenX - PIECE_SIZE / 2, screenY - PIECE_SIZE / 2 , PIECE_SIZE, PIECE_SIZE);
                     //PieceText
-                    gc.fillText(piece.toString(), screenX, screenY);
+                    gc.drawImage(pieceImageManager.getTextImage(piece.side(), piece.pieceType()),
+                            screenX - PIECE_SIZE / imageSize / 2, screenY - PIECE_SIZE / imageSize / 2,
+                            PIECE_SIZE / imageSize, PIECE_SIZE / imageSize);
                 }
             }
         }

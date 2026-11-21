@@ -5,6 +5,8 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import org.apache.batik.transcoder.TranscoderException;
 
+import java.io.IOException;
+
 public class ChessApplication extends Application {
     @Override
     public void start(Stage stage) {
@@ -15,7 +17,7 @@ public class ChessApplication extends Application {
         new MainMenuView(stage);
     }
 
-    public static void chess(Stage stage) throws TranscoderException {
+    public static void chess(Stage stage) throws TranscoderException, IOException {
         new ChessGameView(stage);
     }
 

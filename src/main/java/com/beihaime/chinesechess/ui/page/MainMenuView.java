@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.batik.transcoder.TranscoderException;
 
+import java.io.IOException;
 import java.net.URL;
 
 public class MainMenuView {
@@ -43,6 +44,8 @@ public class MainMenuView {
             try {
                 ChessApplication.chess(stage);
             } catch (TranscoderException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
