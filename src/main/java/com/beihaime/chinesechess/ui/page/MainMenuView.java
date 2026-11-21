@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.apache.batik.transcoder.TranscoderException;
 
 import java.net.URL;
 
@@ -33,7 +34,11 @@ public class MainMenuView {
 
         Button buttonOffline = new Button("Offline Game");
         buttonOffline.setOnAction(event -> {
-            ChessApplication.chess(stage);
+            try {
+                ChessApplication.chess(stage);
+            } catch (TranscoderException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         Button buttonOnline = new Button("Online Game");

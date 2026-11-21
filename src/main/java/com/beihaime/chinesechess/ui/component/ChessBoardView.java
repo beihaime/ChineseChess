@@ -7,23 +7,27 @@ import com.beihaime.chinesechess.model.Piece;
 import com.beihaime.chinesechess.model.Position;
 import com.beihaime.chinesechess.model.Side;
 import com.beihaime.chinesechess.ui.manager.SoundManager;
+import com.beihaime.chinesechess.ui.manager.SvgLoader;
 import com.beihaime.chinesechess.ui.theme.ChessColor;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import org.apache.batik.transcoder.TranscoderException;
 
 public class ChessBoardView extends Canvas {
     private final Game game;
     private final Board board;
     private final SoundManager soundManager = new SoundManager();
+    private final SvgLoader svgLoader;
+    private final Image pieceSvg;
     private Position selectedPosition;
     private Runnable onGameStateChanged;
     private static final double PIECE_SIZE = 36;
     private static final double SPACING = 42;
-    private static final double FRAME = 10;
     private double getStartX() {return (getWidth() - 8 * SPACING) / 2;}
     private double getStartY() {return (getHeight() - 9 * SPACING) / 2;}
     private double getRightX() {return getStartX() + 8 * SPACING;}
@@ -33,10 +37,13 @@ public class ChessBoardView extends Canvas {
         this.onGameStateChanged = callback;
     }
 
-    public ChessBoardView(double width, double height, Game game) {
+    public ChessBoardView(double width, double height, Game game) throws TranscoderException{
         super(width, height);
         this.game = game;
         this.board = game.getBoard();
+        this.svgLoader = new SvgLoader();
+        this.pieceSvg = svgLoader.getImage();
+
         refresh();
         setOnMouseClicked(event -> {
             double mouseX = event.getX();
@@ -154,7 +161,7 @@ public class ChessBoardView extends Canvas {
         gc.setLineWidth(1);
     }
 
-    private void drawPieces() {
+    private void drawPieces(){
         GraphicsContext gc = getGraphicsContext2D();
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
@@ -175,7 +182,7 @@ public class ChessBoardView extends Canvas {
                         gc.setFill(ChessColor.BLACK_PIECE);
                     }
                     //PieceShape
-                    gc.strokeOval(screenX - PIECE_SIZE/2, screenY - PIECE_SIZE/2, PIECE_SIZE, PIECE_SIZE);
+                    gc.drawImage(pieceSvg, screenX - PIECE_SIZE / 2, screenY - PIECE_SIZE / 2 , PIECE_SIZE, PIECE_SIZE);
                     //PieceText
                     gc.fillText(piece.toString(), screenX, screenY);
                 }
