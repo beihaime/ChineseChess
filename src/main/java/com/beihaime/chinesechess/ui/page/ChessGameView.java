@@ -1,6 +1,7 @@
 package com.beihaime.chinesechess.ui.page;
 
 import com.beihaime.chinesechess.game.Game;
+import com.beihaime.chinesechess.ui.ChessApplication;
 import com.beihaime.chinesechess.ui.component.ChessBoardView;
 import com.beihaime.chinesechess.ui.component.ChessButton;
 import com.beihaime.chinesechess.ui.component.ChessInfoPanel;
@@ -17,7 +18,6 @@ public class ChessGameView {
     private static final double WINDOW_WIDTH = 1000;
     private static final double WINDOW_HEIGHT = 700;
     private static final String CSS_PATH = "/css/chess.css";
-
 
     public ChessGameView(Stage stage) {
         Game game = new Game();
@@ -37,8 +37,24 @@ public class ChessGameView {
 
         ChessButton controlPanel = new ChessButton(stage);
         Button quitButton = controlPanel.quitButton();
-        Button undoButton = controlPanel.undoButton(game,boardView,infoPanel);
-        Button redoButton = controlPanel.redoButton(game,boardView,infoPanel);
+        Button undoButton = controlPanel.undoButton();
+        Button redoButton = controlPanel.redoButton();
+
+        quitButton.setOnAction(event ->
+                ChessApplication.mainMenu(stage)
+        );
+
+        undoButton.setOnAction(event -> {
+            game.undo();
+            infoPanel.updateStatus();
+            boardView.refresh();
+        });
+
+        redoButton.setOnAction(event -> {
+            game.redo();
+            infoPanel.updateStatus();
+            boardView.refresh();
+        });
 
         Scene scene = new Scene(root, 850 ,WINDOW_HEIGHT);
         if (css == null) {
