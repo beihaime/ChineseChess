@@ -21,8 +21,9 @@ public class ChessBoardView extends Canvas {
     private final SoundManager soundManager = new SoundManager();
     private Position selectedPosition;
     private Runnable onGameStateChanged;
-    private static final double PIECE_SIZE = 34;
-    private static final double SPACING = 40;
+    private static final double PIECE_SIZE = 36;
+    private static final double SPACING = 42;
+    private static final double FRAME = 10;
     private double getStartX() {return (getWidth() - 8 * SPACING) / 2;}
     private double getStartY() {return (getHeight() - 9 * SPACING) / 2;}
     private double getRightX() {return getStartX() + 8 * SPACING;}
@@ -94,13 +95,26 @@ public class ChessBoardView extends Canvas {
     private void drawBoard() {
         GraphicsContext gc = getGraphicsContext2D();
         gc.setStroke(ChessColor.BOARD_LINE);
+        gc.setLineWidth(1.5);
+
+        //Draw board frame
+        gc.setFill(ChessColor.BOARD_FRAME);
+        gc.fillRect(
+                getStartX() - (20 + PIECE_SIZE / 2),
+                getStartY() - (20 + PIECE_SIZE / 2),
+                8 * SPACING + 40 + PIECE_SIZE,
+                9 * SPACING + 40 +  PIECE_SIZE
+        );
+
+        //Draw board surface
         gc.setFill(ChessColor.BOARD_SURFACE);
         gc.fillRect(
                 getStartX() - 20,
-                getStartY() -20,
+                getStartY() - 20,
                 8 * SPACING + 40,
                 9 * SPACING + 40
         );
+
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
         gc.setFont(Font.font(20));
@@ -136,6 +150,8 @@ public class ChessBoardView extends Canvas {
         gc.setTextBaseline(VPos.CENTER);
         gc.fillText("楚河", getStartX() + 2 * SPACING, getStartY() + 4.45 * SPACING);
         gc.fillText("汉界", getStartX() + 6 * SPACING, getStartY() + 4.45 * SPACING);
+
+        gc.setLineWidth(1);
     }
 
     private void drawPieces() {

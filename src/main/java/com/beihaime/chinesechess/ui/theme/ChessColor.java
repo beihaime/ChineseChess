@@ -7,6 +7,8 @@ public final class ChessColor {
     private ChessColor() {}
 
     // Board
+    public static final Color BOARD_FRAME = Color.web("#795548");
+
     public static final Color BOARD_SURFACE = Color.web("#F4EBDD");
 
     public static final Color BOARD_LINE = Color.web("#3B3028");
