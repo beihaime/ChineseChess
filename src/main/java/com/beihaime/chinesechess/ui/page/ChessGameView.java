@@ -1,8 +1,8 @@
 package com.beihaime.chinesechess.ui.page;
 
 import com.beihaime.chinesechess.game.Game;
-import com.beihaime.chinesechess.ui.ChessApplication;
 import com.beihaime.chinesechess.ui.component.ChessBoardView;
+import com.beihaime.chinesechess.ui.component.ChessControlPanel;
 import com.beihaime.chinesechess.ui.component.ChessInfoPanel;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -35,20 +35,10 @@ public class ChessGameView {
 
         ChessInfoPanel infoPanel = new ChessInfoPanel(game);
 
-        Button buttonQuit = new Button("Quit");
-        buttonQuit.getStyleClass().add("quit-button");
-        buttonQuit.setOnAction(event -> {
-            ChessApplication.mainMenu(stage);
-        });
+        ChessControlPanel controlPanel = new ChessControlPanel(stage);
+        Button quitButton = controlPanel.quitButton();
+        Button undoButton = controlPanel.undoButton(game,boardView,infoPanel);
 
-        Button buttonUndo = new Button("Undo");
-        buttonUndo.getStyleClass().add("undo-button");
-        buttonUndo.setOnAction(event -> {
-            game.undo();
-            boardView.refresh();
-            infoPanel.updateStatus();
-
-        });
         Scene scene = new Scene(root, 850 ,WINDOW_HEIGHT);
         if (css == null) {
             throw new IllegalStateException("Cannot find css");
@@ -68,7 +58,7 @@ public class ChessGameView {
         infoPanel.setPrefHeight(180);
         infoPanel.setMaxWidth(260);
 
-        menu.getChildren().addAll(buttonQuit, buttonUndo);
+        menu.getChildren().addAll(quitButton , undoButton);
 
         root.setLeft(boardView);
         root.setRight(infoPanel);
