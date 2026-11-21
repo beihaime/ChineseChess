@@ -1,0 +1,206 @@
+name: Build Release
+
+on:
+  workflow_dispatch:
+
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      # Checkout source code
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Setup Java 25
+      - name: Setup JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      # Get application version from Git Tag
+      - name: Get Version from Git Tag
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $version = $tag -replace '^v', ''
+
+          if ($version -notmatch '^\d+\.\d+\.\d+([.-][0-9A-Za-z.-]+)?$') {
+            throw "Invalid version tag: $tag"
+          }
+
+          "APP_VERSION=$version" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+          Write-Host "Git Tag: $tag"
+          Write-Host "Application Version: $version"
+
+      # Setup WiX 3.11 for jpackage EXE installer
+      - name: Setup WiX 3.11
+        shell: pwsh
+        run: |
+          $wixUrl = "https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip"
+          $wixZip = "$env:RUNNER_TEMP\wix311.zip"
+          $wixDir = "$env:RUNNER_TEMP\wix311"
+
+          Write-Host "Downloading WiX 3.11..."
+
+          Invoke-WebRequest -Uri $wixUrl -OutFile $wixZip
+          Expand-Archive -Path $wixZip -DestinationPath $wixDir -Force
+
+          # Add WiX to PATH
+          echo "$wixDir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          $env:PATH = "$wixDir;$env:PATH"
+
+          # Verify WiX installation
+          Write-Host "WiX tools:"
+
+          Get-Command candle.exe, light.exe -ErrorAction SilentlyContinue |
+            Format-Table Name, Source
+
+          & "$wixDir\candle.exe" -?
+
+      # Build project
+      - name: Build with Maven
+        run: mvn clean package
+
+      # Prepare application input
+      - name: Prepare application
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force target/package-input
+
+          Copy-Item `
+            target/ChineseChess-1.0-SNAPSHOT.jar `
+            target/package-input/
+
+      # Build Windows EXE installer
+      - name: Package EXE Installer
+        shell: pwsh
+        run: |
+          Write-Host "Building Windows installer..."
+
+          New-Item -ItemType Directory -Force target/installer
+
+          jpackage `
+            --verbose `
+            --type exe `
+            --name ChineseChess `
+            --app-version $env:APP_VERSION `
+            --vendor "Beihaime" `
+            --description "Chinese Chess (Xiangqi)" `
+            --input target/package-input `
+            --main-jar ChineseChess-1.0-SNAPSHOT.jar `
+            --main-class com.beihaime.chinesechess.Main `
+            --dest target/installer `
+            --win-menu `
+            --win-shortcut `
+            --win-dir-chooser `
+            --java-options "-Dfile.encoding=UTF-8"
+
+      # Build portable application image
+      - name: Package Portable App Image
+        shell: pwsh
+        run: |
+          Write-Host "Building portable application image..."
+
+          New-Item -ItemType Directory -Force target/portable
+
+          jpackage `
+            --verbose `
+            --type app-image `
+            --name ChineseChess `
+            --app-version $env:APP_VERSION `
+            --vendor "Beihaime" `
+            --description "Chinese Chess (Xiangqi)" `
+            --input target/package-input `
+            --main-jar ChineseChess-1.0-SNAPSHOT.jar `
+            --main-class com.beihaime.chinesechess.Main `
+            --dest target/portable `
+            --java-options "-Dfile.encoding=UTF-8"
+
+          # Compress portable application
+          Compress-Archive `
+            -Path "target/portable/ChineseChess" `
+            -DestinationPath "target/portable/ChineseChess-portable.zip" `
+            -Force
+
+      # Prepare executable JAR
+      - name: Prepare Executable JAR
+        shell: pwsh
+        run: |
+          Write-Host "Preparing executable JAR..."
+
+          New-Item -ItemType Directory -Force target/release
+
+          Copy-Item `
+            target/ChineseChess-1.0-SNAPSHOT.jar `
+            target/release/ChineseChess.jar
+
+      # Upload EXE installer artifact
+      - name: Upload Windows Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChineseChess-Windows-Installer
+          path: target/installer/*.exe
+
+      # Upload portable ZIP artifact
+      - name: Upload Portable ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChineseChess-Windows-Portable
+          path: target/portable/ChineseChess-portable.zip
+
+      # Upload executable JAR artifact
+      - name: Upload executable JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChineseChess-JAR
+          path: target/release/ChineseChess.jar
+
+      # Create GitHub Release when triggered by a version tag
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ChineseChess ${{ github.ref_name }}
+          body: |
+            # ChineseChess (Xiangqi)
+
+            A JavaFX-based Chinese Chess game.
+
+            ## Downloads
+
+            | Package | Description |
+            |---------|-------------|
+            | Windows Installer (.exe) | Installer with bundled Java Runtime |
+            | Portable (.zip) | Extract and run, no installation required |
+            | Executable JAR (.jar) | Requires a compatible Java Runtime |
+
+            ## Build Information
+
+            - Version: ${{ github.ref_name }}
+            - Java: 25
+            - JavaFX: 27
+            - Build system: Maven
+            - Built from commit: ${{ github.sha }}
+
+          files: |
+            target/installer/*.exe
+            target/portable/ChineseChess-portable.zip
+            target/release/ChineseChess.jar
+
+          draft: false
+          prerelease: false
+          generate_release_notes: true
