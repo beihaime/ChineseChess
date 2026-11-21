@@ -38,6 +38,7 @@ public class ChessGameView {
         ChessControlPanel controlPanel = new ChessControlPanel(stage);
         Button quitButton = controlPanel.quitButton();
         Button undoButton = controlPanel.undoButton(game,boardView,infoPanel);
+        Button redoButton = controlPanel.redoButton(game,boardView,infoPanel);
 
         Scene scene = new Scene(root, 850 ,WINDOW_HEIGHT);
         if (css == null) {
@@ -58,7 +59,7 @@ public class ChessGameView {
         infoPanel.setPrefHeight(180);
         infoPanel.setMaxWidth(260);
 
-        menu.getChildren().addAll(quitButton , undoButton);
+        menu.getChildren().addAll(quitButton , undoButton , redoButton);
 
         root.setLeft(boardView);
         root.setRight(infoPanel);

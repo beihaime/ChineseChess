@@ -32,4 +32,15 @@ public class ChessControlPanel {
         });
         return undo;
     }
+
+    public final Button redoButton(Game game, ChessBoardView boardView, ChessInfoPanel infoPanel) {
+        Button redo = new Button("Redo");
+        redo.getStyleClass().add("redo-button");
+        redo.setOnAction(event -> {
+            game.redo();
+            boardView.refresh();
+            infoPanel.updateStatus();
+        });
+        return redo;
+    }
 }
