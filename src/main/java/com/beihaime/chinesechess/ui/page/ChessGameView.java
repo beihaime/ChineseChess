@@ -36,9 +36,12 @@ public class ChessGameView {
         ChessInfoPanel infoPanel = new ChessInfoPanel(game);
 
         ChessButton controlPanel = new ChessButton(stage);
+
         Button quitButton = controlPanel.quitButton();
         Button undoButton = controlPanel.undoButton();
         Button redoButton = controlPanel.redoButton();
+
+        updateButtonVisibility(game, undoButton, redoButton);
 
         quitButton.setOnAction(event ->
                 ChessApplication.mainMenu(stage)
@@ -48,12 +51,16 @@ public class ChessGameView {
             game.undo();
             infoPanel.updateStatus();
             boardView.refresh();
+
+            updateButtonVisibility(game, undoButton, redoButton);
         });
 
         redoButton.setOnAction(event -> {
             game.redo();
             infoPanel.updateStatus();
             boardView.refresh();
+
+            updateButtonVisibility(game, undoButton, redoButton);
         });
 
         Scene scene = new Scene(root, 850 ,WINDOW_HEIGHT);
@@ -69,7 +76,10 @@ public class ChessGameView {
         stage.setMinHeight(650);
 
 
-        boardView.setOnGameStateChanged(infoPanel::updateStatus);
+        boardView.setOnGameStateChanged( () -> {
+            infoPanel.updateStatus();
+            updateButtonVisibility(game, undoButton, redoButton);
+        });
 
         infoPanel.setPrefWidth(220);
         infoPanel.setPrefHeight(180);
@@ -83,6 +93,18 @@ public class ChessGameView {
 
         stage.setScene(scene);
         stage.show();
+
+    }
+
+    private  void updateButtonVisibility(Game game,Button undoButton, Button redoButton) {
+        boolean canUndo = !game.getMoveHistory().isEmpty();
+        boolean canRedo = !game.getRedoHistory().isEmpty();
+
+        redoButton.setVisible(canRedo);
+        undoButton.setVisible(canUndo);
+
+        undoButton.setManaged(canUndo);
+        redoButton.setManaged(canRedo);
 
     }
 }

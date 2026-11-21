@@ -37,6 +37,18 @@ public class Game {
         return List.copyOf(moveHistory);
     }
 
+    public List<Move> getRedoHistory() {
+        return List.copyOf(redoHistory);
+    }
+
+    public boolean canUndo() {
+        return !moveHistory.isEmpty();
+    }
+
+    public boolean canRedo() {
+        return !redoHistory.isEmpty();
+    }
+
     public void  printMoveHistory() {
         int number = 1;
         for (Move move: moveHistory) {
