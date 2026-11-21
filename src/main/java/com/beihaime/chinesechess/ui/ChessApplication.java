@@ -1,4 +1,6 @@
 package com.beihaime.chinesechess.ui;
+import com.beihaime.chinesechess.ui.page.ChessGameView;
+import com.beihaime.chinesechess.ui.page.MainMenuView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

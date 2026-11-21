@@ -1,4 +1,4 @@
-package com.beihaime.chinesechess.ui;
+package com.beihaime.chinesechess.ui.manager;
 
 import javafx.scene.media.AudioClip;
 import java.net.URL;

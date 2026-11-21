@@ -1,5 +1,6 @@
-package com.beihaime.chinesechess.ui;
+package com.beihaime.chinesechess.ui.page;
 
+import com.beihaime.chinesechess.ui.ChessApplication;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

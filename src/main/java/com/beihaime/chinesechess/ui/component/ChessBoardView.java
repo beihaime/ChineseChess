@@ -1,4 +1,4 @@
-package com.beihaime.chinesechess.ui;
+package com.beihaime.chinesechess.ui.component;
 
 import com.beihaime.chinesechess.game.Game;
 import com.beihaime.chinesechess.game.MoveResult;
@@ -6,6 +6,7 @@ import com.beihaime.chinesechess.model.Board;
 import com.beihaime.chinesechess.model.Piece;
 import com.beihaime.chinesechess.model.Position;
 import com.beihaime.chinesechess.model.Side;
+import com.beihaime.chinesechess.ui.manager.SoundManager;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

@@ -1,4 +1,4 @@
-package com.beihaime.chinesechess.ui;
+package com.beihaime.chinesechess.ui.component;
 
 import com.beihaime.chinesechess.game.Game;
 import com.beihaime.chinesechess.game.GameStatus;
