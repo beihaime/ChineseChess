@@ -1,0 +1,27 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+
+    <defs>
+        <radialGradient id="wood" cx="35%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="#FFF9EA"></stop>
+            <stop offset="100%" stop-color="#D9BD91"></stop>
+        </radialGradient>
+
+        <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="2"></feGaussianBlur>
+        </filter>
+    </defs>
+
+    <!-- Shadow -->
+    <circle cx="61" cy="62" r="53" fill="#000000" opacity="0.2" filter="url(#shadow)"></circle>
+
+    <!-- Main body -->
+    <circle cx="60" cy="60" r="53" fill="url(#wood)" stroke="#795548" stroke-width="3"></circle>
+
+    <!-- Inner decorative ring -->
+    <circle cx="60" cy="60" r="46" fill="none" stroke="#A98458" stroke-width="1.5"></circle>
+
+    <!-- Highlight -->
+    <path d="M 28 30 A 43 43 0 0 1 80 20" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.5" stroke-linecap="round"></path>
+
+</svg>
