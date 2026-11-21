@@ -2,7 +2,7 @@ package com.beihaime.chinesechess.ui.page;
 
 import com.beihaime.chinesechess.game.Game;
 import com.beihaime.chinesechess.ui.component.ChessBoardView;
-import com.beihaime.chinesechess.ui.component.ChessControlPanel;
+import com.beihaime.chinesechess.ui.component.ChessButton;
 import com.beihaime.chinesechess.ui.component.ChessInfoPanel;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -35,7 +35,7 @@ public class ChessGameView {
 
         ChessInfoPanel infoPanel = new ChessInfoPanel(game);
 
-        ChessControlPanel controlPanel = new ChessControlPanel(stage);
+        ChessButton controlPanel = new ChessButton(stage);
         Button quitButton = controlPanel.quitButton();
         Button undoButton = controlPanel.undoButton(game,boardView,infoPanel);
         Button redoButton = controlPanel.redoButton(game,boardView,infoPanel);

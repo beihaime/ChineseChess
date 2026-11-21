@@ -6,10 +6,10 @@ import com.beihaime.chinesechess.ui.ChessApplication;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-public class ChessControlPanel {
+public class ChessButton {
     private final Stage stage;
 
-    public ChessControlPanel(Stage stage) {
+    public ChessButton(Stage stage) {
         this.stage = stage;
     }
 
