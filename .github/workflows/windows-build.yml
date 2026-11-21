@@ -56,15 +56,10 @@ jobs:
           New-Item -ItemType Directory -Force target/package-input
           Copy-Item target/ChineseChess-1.0-SNAPSHOT.jar target/package-input/
 
-      - name: Package EXE
+      - name: Package EXE (Installer)
         shell: pwsh
         run: |
-          Write-Host "Current PATH (first few):"
-          $env:PATH -split ';' | Select-Object -First 5
-          
-          Write-Host "Which wix/candle:"
-          Get-Command wix.exe, candle.exe -ErrorAction SilentlyContinue | Format-Table Name, Source
-          
+          Write-Host "Building installer (exe)..."
           jpackage `
             --verbose `
             --type exe `
@@ -81,23 +76,53 @@ jobs:
             --win-dir-chooser `
             --java-options "-Dfile.encoding=UTF-8"
 
-      - name: Upload installer
+      - name: Package App Image (Portable)
+        shell: pwsh
+        run: |
+          Write-Host "Building portable app-image..."
+          jpackage `
+            --verbose `
+            --type app-image `
+            --name ChineseChess `
+            --app-version 1.0.0 `
+            --vendor "Beihaime" `
+            --description "Chinese Chess (Xiangqi)" `
+            --input target/package-input `
+            --main-jar ChineseChess-1.0-SNAPSHOT.jar `
+            --main-class com.beihaime.chinesechess.Main `
+            --dest target/portable `
+            --java-options "-Dfile.encoding=UTF-8"
+          
+          # Zip the portable folder for easy download
+          Compress-Archive -Path "target/portable/ChineseChess" -DestinationPath "target/portable/ChineseChess-portable.zip" -Force
+
+      - name: Upload installer (exe)
         uses: actions/upload-artifact@v4
         with:
           name: ChineseChess-Windows-Installer
           path: target/installer/*.exe
 
+      - name: Upload portable (app-image)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChineseChess-Windows-Portable
+          path: target/portable/ChineseChess-portable.zip
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: windows-installer-${{ github.run_number }}
-          name: Windows Installer #${{ github.run_number }}
+          name: Windows Build #${{ github.run_number }}
           body: |
-            Chinese Chess Windows Installer
+            Chinese Chess Windows builds
 
-            - Built from commit: ${{ github.sha }}
-            - Workflow run: ${{ github.run_id }}
-          files: target/installer/*.exe
+            - **Installer** (`.exe`): 需要安装，会创建开始菜单快捷方式
+            - **Portable** (`.zip`): 解压即用，绿色版，无需安装
+
+            Built from commit: ${{ github.sha }}
+          files: |
+            target/installer/*.exe
+            target/portable/ChineseChess-portable.zip
           draft: false
           prerelease: false
           generate_release_notes: true
