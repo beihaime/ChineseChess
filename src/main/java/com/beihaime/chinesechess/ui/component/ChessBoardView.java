@@ -26,7 +26,9 @@ public class ChessBoardView extends Canvas {
     private final Image pieceSvg;
     private Position selectedPosition;
     private Runnable onGameStateChanged;
+    private static final double FRAME_PADING = 25;
     private static final double PIECE_SIZE = 36;
+    private static final double FRAME_INSET = PIECE_SIZE / 2;
     private static final double SPACING = 42;
     private double getStartX() {return (getWidth() - 8 * SPACING) / 2;}
     private double getStartY() {return (getHeight() - 9 * SPACING) / 2;}
@@ -104,23 +106,26 @@ public class ChessBoardView extends Canvas {
         gc.setStroke(ChessColor.BOARD_LINE);
         gc.setLineWidth(1.5);
 
-        //Draw board frame
-        gc.setFill(ChessColor.BOARD_FRAME);
-        gc.fillRect(
-                getStartX() - (20 + PIECE_SIZE / 2),
-                getStartY() - (20 + PIECE_SIZE / 2),
-                8 * SPACING + 40 + PIECE_SIZE,
-                9 * SPACING + 40 +  PIECE_SIZE
-        );
 
         //Draw board surface
         gc.setFill(ChessColor.BOARD_SURFACE);
         gc.fillRect(
-                getStartX() - 20,
-                getStartY() - 20,
-                8 * SPACING + 40,
-                9 * SPACING + 40
+                getStartX() - FRAME_PADING,
+                getStartY() - FRAME_PADING,
+                8 * SPACING + FRAME_PADING * 2,
+                9 * SPACING + FRAME_PADING * 2
         );
+
+        //Draw board frame
+        gc.setLineWidth(3);
+        gc.setFill(ChessColor.BOARD_LINE);
+        gc.strokeRect(
+                getStartX() - (FRAME_PADING - FRAME_INSET),
+                getStartY() - (FRAME_PADING - FRAME_INSET),
+                8 * SPACING + FRAME_PADING * 2 - FRAME_INSET * 2,
+                9 * SPACING + FRAME_PADING * 2 - FRAME_INSET * 2
+        );
+        gc.setLineWidth(1.5);
 
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
