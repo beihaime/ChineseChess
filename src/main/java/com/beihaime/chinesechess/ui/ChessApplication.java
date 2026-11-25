@@ -1,6 +1,7 @@
 package com.beihaime.chinesechess.ui;
 import com.beihaime.chinesechess.ui.page.ChessGameView;
 import com.beihaime.chinesechess.ui.page.MainMenuView;
+import com.beihaime.chinesechess.ui.page.RoomView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.apache.batik.transcoder.TranscoderException;
@@ -19,6 +20,10 @@ public class ChessApplication extends Application {
 
     public static void chess(Stage stage) throws TranscoderException, IOException {
         new ChessGameView(stage);
+    }
+
+    public static void Room(Stage stage) {
+        new RoomView(stage);
     }
 
     public static void launchApp(String[] args) {

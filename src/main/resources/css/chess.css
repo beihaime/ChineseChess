@@ -98,6 +98,7 @@
    ======================================== */
 
 .quitGame-button,
+.quitToHome,
 .start-button {
     -fx-pref-width: 200px;
     -fx-pref-height: 60px;

@@ -51,7 +51,7 @@ public class MainMenuView {
         });
 
         buttonOnline.setOnAction(event -> {
-            System.out.println("Starting Game online");
+            ChessApplication.Room(stage);
         });
 
         buttonQuitGame.setOnAction(event -> {
