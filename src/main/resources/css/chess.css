@@ -113,6 +113,7 @@
 }
 
 .quit-to-home,
+.join-room-button,
 .create-room-button {
     -fx-pref-width: 150px;
     -fx-pref-height: 40px

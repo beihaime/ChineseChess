@@ -71,4 +71,10 @@ public class ChessButton {
         return enterRoom;
     }
 
+    public final Button JoinRoomButton() {
+        Button joinRoom = new Button("JoinRoom");
+        joinRoom.getStyleClass().add("join-room-button");
+        return joinRoom;
+    }
+
 }

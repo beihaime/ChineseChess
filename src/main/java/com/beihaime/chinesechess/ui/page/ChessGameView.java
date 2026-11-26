@@ -46,9 +46,11 @@ public class ChessGameView {
 
         updateButtonVisibility(game, undoButton, redoButton);
 
-        quitButton.setOnAction(event ->
-                ChessApplication.mainMenu(stage)
-        );
+        quitButton.setOnAction(event -> {
+            ChessApplication.mainMenu(stage);
+            ChessApplication.getRoomManager().closeCurrentRoom();
+
+        });
 
         undoButton.setOnAction(event -> {
             game.undo();

@@ -29,6 +29,7 @@ public class RoomView {
 
         Button quit = button.quitToHomeButton();
         Button createRoom = button.CreateRoomButton();
+        Button joinRoom = button.JoinRoomButton();
 
         quit.setOnAction(event -> {
             ChessApplication.getRoomManager().closeCurrentRoom();
@@ -39,7 +40,13 @@ public class RoomView {
             ChessApplication.createRoom(stage);
         });
 
-        controlPanel.getChildren().addAll(createRoom,quit);
+        joinRoom.setOnAction(event -> {
+            ChessApplication.joinRoom(stage);
+        });
+
+
+
+        controlPanel.getChildren().addAll(createRoom,joinRoom,quit);
 
         URL css = getClass().getResource(CSS_PATH);
         if (css == null) {

@@ -1,9 +1,6 @@
 package com.beihaime.chinesechess.ui;
 import com.beihaime.chinesechess.ui.manager.RoomManager;
-import com.beihaime.chinesechess.ui.page.ChessGameView;
-import com.beihaime.chinesechess.ui.page.CreateRoomView;
-import com.beihaime.chinesechess.ui.page.MainMenuView;
-import com.beihaime.chinesechess.ui.page.RoomView;
+import com.beihaime.chinesechess.ui.page.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.apache.batik.transcoder.TranscoderException;
@@ -31,6 +28,10 @@ public class ChessApplication extends Application {
 
     public static void createRoom(Stage stage) {
         new CreateRoomView(stage);
+    }
+
+    public static void joinRoom(Stage stage) {
+        new JoinRoomView(stage);
     }
 
     public static void Room(Stage stage) {
