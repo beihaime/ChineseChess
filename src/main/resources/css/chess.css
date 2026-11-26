@@ -161,14 +161,20 @@
 
 .status-waiting {
     -fx-text-fill: #6D9565;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
 }
 
 .status-playing {
     -fx-text-fill: #D9A441;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
 }
 
 .status-closed {
     -fx-text-fill: #B83232;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
 }
 
 .room-card {
@@ -235,14 +241,6 @@
     -fx-padding: 6px 10px;
 }
 
-
-/* ========================================
-   Labels
-   ======================================== */
-
-.label {
-    -fx-text-fill: text-primary;
-}
 
 .title-label {
     -fx-font-size: 50px;
