@@ -23,7 +23,7 @@ public class RoomView {
 
         BorderPane root = new BorderPane();
         VBox controlPanel = new VBox(10);
-        roomListView = new RoomListView();
+        roomListView = new RoomListView(stage);
 
         controlPanel.setAlignment(Pos.TOP_CENTER);
 
@@ -31,6 +31,7 @@ public class RoomView {
         Button createRoom = button.CreateRoomButton();
 
         quit.setOnAction(event -> {
+            ChessApplication.getRoomManager().closeCurrentRoom();
             ChessApplication.mainMenu(stage);
         });
 

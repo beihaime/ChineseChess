@@ -7,12 +7,12 @@ import java.util.UUID;
 public class RoomManager {
     private Room currentRoom;
 
-    public Room createRoom(String roomName, int port) throws IOException {
+    public Room createRoom(String roomName, int port,int maxPlayers) throws IOException {
         currentRoom = new Room(String.valueOf(UUID.randomUUID()),
                 roomName,
                 "LocalHost",
                 port,
-                2);
+                maxPlayers);
         return currentRoom;
     }
 
@@ -20,6 +20,11 @@ public class RoomManager {
         if (currentRoom == null) {
             return new Room("NO-ROOMS","NOROOMS","NOROOMS",8888,1);
         }
+        return currentRoom;
+    }
+
+    public Room closeCurrentRoom() {
+        currentRoom = null;
         return currentRoom;
     }
 }

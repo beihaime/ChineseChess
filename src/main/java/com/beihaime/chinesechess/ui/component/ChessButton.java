@@ -65,4 +65,10 @@ public class ChessButton {
         return host;
     }
 
+    public final Button EnterRoomButton() {
+        Button enterRoom = new Button("EnterRoom");
+        enterRoom.getStyleClass().add("enter-room-button");
+        return enterRoom;
+    }
+
 }

@@ -4,6 +4,7 @@ import com.beihaime.chinesechess.ui.ChessApplication;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.TilePane;
+import javafx.stage.Stage;
 
 public class RoomListView {
     private final ScrollPane scrollPane = new ScrollPane();
@@ -12,7 +13,7 @@ public class RoomListView {
     private static final double WIDTH = 730;
     private static final double HEIGHT = 600;
 
-    public RoomListView() {
+    public RoomListView(Stage stage) {
         tilePane.setAlignment(Pos.TOP_LEFT);
         tilePane.setHgap(4);
         tilePane.setVgap(3);
@@ -21,8 +22,8 @@ public class RoomListView {
         tilePane.setPrefTileWidth(715);
         tilePane.setPrefTileHeight(150);
 
-        RoomCard card = new RoomCard(ChessApplication.getRoomManager().getCurrentRoom());
-        tilePane.getChildren().add(card.getView());
+        RoomCard card = new RoomCard(ChessApplication.getRoomManager().getCurrentRoom(),stage);
+        tilePane.getChildren().add(card.view());
 
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(false);
@@ -44,7 +45,7 @@ public class RoomListView {
     }
 
     public void createRoomCard(RoomCard roomCard) {
-        tilePane.getChildren().add(roomCard.getView());
+        tilePane.getChildren().add(roomCard.view());
     }
 
 

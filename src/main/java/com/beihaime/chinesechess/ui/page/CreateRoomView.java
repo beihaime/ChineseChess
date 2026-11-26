@@ -19,6 +19,7 @@ public class CreateRoomView {
     private static final String CSS_PATH = "/css/chess.css";
     private final TextField roomNameField = new TextField();
     private final TextField portField = new TextField();
+    private final TextField maxPlayersField = new TextField();
 
     public CreateRoomView(Stage stage) {
         URL css = getClass().getResource(CSS_PATH);
@@ -43,9 +44,10 @@ public class CreateRoomView {
             }
             String roomName = roomNameField.getText();
             int port = Integer.parseInt(portField.getText());
+            int maxPlayers = Integer.parseInt(maxPlayersField.getText());
             RoomManager roomManager = ChessApplication.getRoomManager();
             try {
-                roomManager.createRoom(roomName,port);
+                roomManager.createRoom(roomName,port,maxPlayers);
                 System.out.println("success");
                 ChessApplication.Room(stage);
 
@@ -58,7 +60,7 @@ public class CreateRoomView {
             ChessApplication.Room(stage);
         });
 
-        root.getChildren().addAll(title,roomNameField,portField,host,cancel);
+        root.getChildren().addAll(title,roomNameField,portField,maxPlayersField,host,cancel);
 
         Scene scene = new Scene(root);
 
@@ -70,6 +72,7 @@ public class CreateRoomView {
     private void initializeFields() {
         roomNameField.getStyleClass().add("room-input");
         portField.getStyleClass().add("room-input");
+        maxPlayersField.getStyleClass().add("room-input");
 
         roomNameField.setPromptText("Enter Room Name:");
         roomNameField.setAlignment(Pos.CENTER);
@@ -77,13 +80,17 @@ public class CreateRoomView {
         portField.setPromptText("Enter Room Port:");
         portField.setAlignment(Pos.CENTER);
 
+        maxPlayersField.setPromptText("Enter Room Max Players:");
+        maxPlayersField.setAlignment(Pos.CENTER);
+
     }
 
     private boolean isValidInput() {
         String roomName = roomNameField.getText().trim();
         String portText = portField.getText().trim();
+        String maxPlayersText = maxPlayersField.getText().trim();
 
-        if (roomName.isEmpty() || portText.isEmpty()) {
+        if (roomName.isEmpty() || portText.isEmpty() || maxPlayersText.isEmpty()) {
             return false;
         }
 
