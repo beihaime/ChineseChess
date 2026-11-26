@@ -8,7 +8,7 @@ public class RoomListView {
     private final ScrollPane scrollPane = new ScrollPane();
     private final TilePane tilePane = new TilePane();
 
-    private static final double WIDTH = 750;
+    private static final double WIDTH = 730;
     private static final double HEIGHT = 600;
 
     public RoomListView() {

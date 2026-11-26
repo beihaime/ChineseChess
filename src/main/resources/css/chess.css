@@ -131,6 +131,16 @@
     -fx-text-fill: #252525;
 }
 
+.room-info-value {
+    -fx-font-size: 14px;
+    -fx-text-fill: #252525;
+}
+
+.room-separator {
+    -fx-background-color: #D9CBB9;
+    -fx-padding: 0;
+}
+
 .status-waiting {
     -fx-text-fill: #6D9565;
 }

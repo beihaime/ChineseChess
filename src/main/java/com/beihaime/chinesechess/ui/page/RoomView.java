@@ -27,9 +27,7 @@ public class RoomView {
         VBox controlPanel = new VBox(10);
         RoomListView roomListView = new RoomListView();
 
-//        roomPreview.setAlignment(Pos.TOP_CENTER);
-
-        controlPanel.setAlignment(Pos.BOTTOM_CENTER);
+        controlPanel.setAlignment(Pos.TOP_CENTER);
 
         Button quit = button.quitToHomeButton();
         Button createRoom = button.CreateRoomButton();
@@ -43,7 +41,7 @@ public class RoomView {
             roomListView.createRoomCard(new RoomCard(room));
         });
 
-        controlPanel.getChildren().addAll(quit,createRoom);
+        controlPanel.getChildren().addAll(createRoom,quit);
 
         URL css = getClass().getResource(CSS_PATH);
         if (css == null) {
