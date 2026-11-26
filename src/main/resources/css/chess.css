@@ -98,12 +98,102 @@
    ======================================== */
 
 .quitGame-button,
-.quitToHome,
 .start-button {
     -fx-pref-width: 200px;
     -fx-pref-height: 60px;
 }
 
+.quit-to-home,
+.create-room-button {
+    -fx-pref-width: 150px;
+    -fx-pref-height: 40px
+}
+
+.room-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #252525;
+}
+
+.host-address {
+    -fx-font-size: 13px;
+    -fx-text-fill: #795548;
+}
+
+.port {
+    -fx-font-size: 13px;
+    -fx-text-fill: #795548;
+}
+
+.player-count {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #252525;
+}
+
+.status-waiting {
+    -fx-text-fill: #6D9565;
+}
+
+.status-playing {
+    -fx-text-fill: #D9A441;
+}
+
+.status-closed {
+    -fx-text-fill: #B83232;
+}
+
+.room-card {
+    -fx-background-color: #F4EBDD;
+    -fx-border-color: #795548;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 12px;
+}
+
+.room-scroll-pane {
+    -fx-background-color: #F4EBDD;
+    -fx-background: #F4EBDD;
+    -fx-border-color: #795548;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+
+
+.room-scroll-pane > .viewport {
+    -fx-background-color: #F4EBDD;
+}
+
+.room-scroll-pane .scroll-bar:vertical {
+    -fx-background-color: #E8DCC8;
+    -fx-pref-width: 10px;
+}
+
+.room-scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: #795548;
+    -fx-background-radius: 5px;
+}
+
+.room-scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #A07865;
+}
+
+.room-scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: #E8DCC8;
+    -fx-background-radius: 5px;
+}
+
+.room-scroll-pane .scroll-bar .increment-button,
+.room-scroll-pane .scroll-bar .decrement-button {
+    -fx-padding: 0;
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
+}
+
+.room-scroll-pane .scroll-bar .increment-arrow,
+.room-scroll-pane .scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+}
 
 /* ========================================
    Control Buttons

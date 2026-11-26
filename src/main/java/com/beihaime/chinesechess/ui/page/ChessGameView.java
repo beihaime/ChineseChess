@@ -17,11 +17,12 @@ import java.io.IOException;
 import java.net.URL;
 
 public class ChessGameView {
-    private static final double WINDOW_WIDTH = 1000;
-    private static final double WINDOW_HEIGHT = 700;
     private static final String CSS_PATH = "/css/chess.css";
 
     public ChessGameView(Stage stage) throws TranscoderException, IOException {
+        double WINDOW_WIDTH = ChessApplication.getWindowWidth();
+        double WINDOW_HEIGHT = ChessApplication.getWindowHeight();
+
         Game game = new Game();
         BorderPane root = new BorderPane();
         HBox menu = new HBox(15);

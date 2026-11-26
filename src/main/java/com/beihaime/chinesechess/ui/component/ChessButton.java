@@ -17,6 +17,18 @@ public class ChessButton {
         return quit;
     }
 
+    public final Button quitToHomeButton() {
+        Button quit = new Button("QuitToHome");
+        quit.getStyleClass().add("quit-to-home");
+        return quit;
+    }
+
+    public final Button CreateRoomButton() {
+        Button createRoom = new Button("CreateRoom");
+        createRoom.getStyleClass().add("create-room-button");
+        return createRoom;
+    }
+
     public final Button undoButton() {
         Button undo = new Button("Undo");
         undo.getStyleClass().add("undo-button");

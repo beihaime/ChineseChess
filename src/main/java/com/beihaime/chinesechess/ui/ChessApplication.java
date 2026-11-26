@@ -9,6 +9,9 @@ import org.apache.batik.transcoder.TranscoderException;
 import java.io.IOException;
 
 public class ChessApplication extends Application {
+    private static final double WINDOW_WIDTH = 1000;
+    private static final double WINDOW_HEIGHT = 700;
+
     @Override
     public void start(Stage stage) {
        mainMenu(stage);
@@ -28,5 +31,13 @@ public class ChessApplication extends Application {
 
     public static void launchApp(String[] args) {
         launch(args);
+    }
+
+    public static double getWindowWidth() {
+        return WINDOW_WIDTH;
+    }
+
+    public static double getWindowHeight() {
+        return WINDOW_HEIGHT;
     }
 }

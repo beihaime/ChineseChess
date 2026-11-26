@@ -16,12 +16,14 @@ import java.io.IOException;
 import java.net.URL;
 
 public class MainMenuView {
-    private static final double WINDOW_WIDTH = 1000;
-    private static final double WINDOW_HEIGHT = 700;
+
     private static final String CSS_PATH = "/css/chess.css";
 
     public MainMenuView(Stage stage) {
         URL css = getClass().getResource(CSS_PATH);
+
+        double WINDOW_WIDTH = ChessApplication.getWindowWidth();
+        double WINDOW_HEIGHT = ChessApplication.getWindowHeight();
         stage.setTitle("Chinese Chess");
         stage.setWidth(WINDOW_WIDTH);
         stage.setHeight(WINDOW_HEIGHT);
