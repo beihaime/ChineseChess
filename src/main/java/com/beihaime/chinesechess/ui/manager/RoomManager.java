@@ -2,7 +2,11 @@ package com.beihaime.chinesechess.ui.manager;
 
 import com.beihaime.chinesechess.model.Room;
 import com.beihaime.chinesechess.network.client.GameClient;
+import com.beihaime.chinesechess.network.protocol.Message;
+import com.beihaime.chinesechess.network.protocol.MessageType;
 import com.beihaime.chinesechess.network.server.GameServer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -10,12 +14,11 @@ import java.util.UUID;
 public class RoomManager {
     private Room currentRoom;
     private GameClient currentClient;
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public Room createRoom(String roomName, int port,int maxPlayers) throws IOException {
         GameServer server = new GameServer(port);
-        Thread serverThread = new Thread(() ->{
-            server.start();
-        });
+        Thread serverThread = new Thread(server::start);
         serverThread.start();
 
         currentRoom = new Room(String.valueOf(UUID.randomUUID()),
@@ -35,21 +38,30 @@ public class RoomManager {
             }
         });
         Thread inputThread = new Thread(() ->{
-            String response = null;
+            Message response = null;
             try {
-                response = currentClient.getInput().readLine();
+                response = currentClient.receive();
+                if (response != null) {
+                    String content = response.data().get("message").asText();
+                    System.out.println(content);
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            System.out.println(response);
         });
         Thread outputThread = new Thread(() ->{
-            currentClient.sendMessage("你好");
+            ObjectNode data = mapper.createObjectNode();
+            data.put("message","getServerInfo");
+            try {
+                currentClient.send(new Message(MessageType.JOIN_ROOM.name(), data));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
         inputThread.start();
         outputThread.start();
         clientThread.start();
-        currentRoom = new Room("test","test",ip,port,1);
+//        currentRoom = new Room();
 
 
 

@@ -1,6 +1,9 @@
 package com.beihaime.chinesechess.network.client;
 
 
+import com.beihaime.chinesechess.network.protocol.Message;
+import com.beihaime.chinesechess.network.protocol.MessageCodec;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -33,21 +36,32 @@ public class GameClient  {
         );
 
     }
-    public BufferedReader getInput(){
+    public BufferedReader getInput() {
         return input;
     }
 
-    public BufferedWriter getOutput(){
+    public BufferedWriter getOutput() {
         return output;
     }
 
-    public void sendMessage(String message){
+    public void send(Message message) throws IOException {
         try {
-            output.write(message);
+            String json = MessageCodec.encode(message);
+            output.write(json);
             output.newLine();
             output.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Message receive() throws IOException {
+        String json = input.readLine();
+
+        if (json == null) {
+            return null;
+        }
+
+        return MessageCodec.decode(json);
     }
 }
