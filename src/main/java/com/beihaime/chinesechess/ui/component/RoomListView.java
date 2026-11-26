@@ -1,5 +1,6 @@
 package com.beihaime.chinesechess.ui.component;
 
+import com.beihaime.chinesechess.ui.ChessApplication;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.TilePane;
@@ -19,6 +20,9 @@ public class RoomListView {
         tilePane.setPrefRows(4);
         tilePane.setPrefTileWidth(715);
         tilePane.setPrefTileHeight(150);
+
+        RoomCard card = new RoomCard(ChessApplication.getRoomManager().getCurrentRoom());
+        tilePane.getChildren().add(card.getView());
 
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(false);

@@ -59,4 +59,10 @@ public class ChessButton {
         return quit;
     }
 
+    public final Button HostButton() {
+        Button host = new Button("HostGame");
+        host.getStyleClass().add("host-game");
+        return host;
+    }
+
 }

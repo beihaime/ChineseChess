@@ -16,7 +16,7 @@ public class RoomCard {
         this.room = room;
         this.view = new VBox(5);
 
-        HBox header = new HBox(500);
+        HBox header = new HBox(400);
         GridPane information = new GridPane();
 
         Separator separator = new Separator(Orientation.HORIZONTAL);

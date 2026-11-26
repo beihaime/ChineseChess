@@ -1,9 +1,7 @@
 package com.beihaime.chinesechess.ui.page;
 
-import com.beihaime.chinesechess.model.Room;
 import com.beihaime.chinesechess.ui.ChessApplication;
 import com.beihaime.chinesechess.ui.component.ChessButton;
-import com.beihaime.chinesechess.ui.component.RoomCard;
 import com.beihaime.chinesechess.ui.component.RoomListView;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,10 +11,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.UUID;
 
 public class RoomView {
     private static final String CSS_PATH = "/css/chess.css";
+    private final RoomListView roomListView;
 
     public RoomView(Stage stage){
         stage.setTitle("Room Selector");
@@ -25,7 +23,7 @@ public class RoomView {
 
         BorderPane root = new BorderPane();
         VBox controlPanel = new VBox(10);
-        RoomListView roomListView = new RoomListView();
+        roomListView = new RoomListView();
 
         controlPanel.setAlignment(Pos.TOP_CENTER);
 
@@ -37,8 +35,7 @@ public class RoomView {
         });
 
         createRoom.setOnAction(event -> {
-            Room room = new Room(UUID.randomUUID().toString(),"test","add",8888,2);
-            roomListView.createRoomCard(new RoomCard(room));
+            ChessApplication.createRoom(stage);
         });
 
         controlPanel.getChildren().addAll(createRoom,quit);

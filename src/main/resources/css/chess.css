@@ -98,6 +98,7 @@
    ======================================== */
 
 .quitGame-button,
+.host-game,
 .start-button {
     -fx-pref-width: 200px;
     -fx-pref-height: 60px;
@@ -107,6 +108,23 @@
 .create-room-button {
     -fx-pref-width: 150px;
     -fx-pref-height: 40px
+}
+
+.room-input {
+    -fx-background-color: #F4EBDD;
+    -fx-border-color: #D9CBB9;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #252525;
+    -fx-prompt-text-fill: #9B8B7A;
+}
+
+.room-input:focused {
+    -fx-border-color: #D9A441;
+    -fx-border-width: 1.5px;
 }
 
 .room-name {
