@@ -30,7 +30,7 @@ public class RoomManager {
 
         currentRoom = new Room(String.valueOf(UUID.randomUUID()),
                 roomName,
-                currentServer.getIp(),
+                "LocalHost",
                 port,
                 1,
                 maxPlayers,

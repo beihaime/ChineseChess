@@ -61,6 +61,7 @@ public record RoomCard(VBox view, Room room) {
         switch (room.getStatus()) {
             case CLOSED -> roomStatus.getStyleClass().add("status-closed");
             case WAITING -> roomStatus.getStyleClass().add("status-waiting");
+            case READY -> roomStatus.getStyleClass().add("status-ready");
             case PLAYING -> roomStatus.getStyleClass().add("status-playing");
         }
 

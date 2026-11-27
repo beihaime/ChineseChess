@@ -66,7 +66,9 @@ public class ClientHandler implements Runnable {
                     data.put("reason","Room is fulled");
                     return new Message(MessageType.JOIN_FAILED.name(), data );
                 }
-                serverRoom.changeRoomStatus(RoomStatus.PLAYING);
+                if (serverRoom.getPlayerCount() == 2) {
+                    serverRoom.changeRoomStatus(RoomStatus.READY);
+                }
                 ChessApplication.getRoomManager().notifyOnRoomChanged();
                 String player = message.data().get("playerName").asText();
                 System.out.println( "received "+ player);
@@ -94,7 +96,7 @@ public class ClientHandler implements Runnable {
                     joinedRoom = true;
                     send(response);
                 }
-                if (message == null && joinedRoom) {
+                if (message == null && joinedRoom ) {
                     socket.close();
                     serverRoom.changeRoomStatus(RoomStatus.WAITING);
                     serverRoom.tryRemovePlayer();

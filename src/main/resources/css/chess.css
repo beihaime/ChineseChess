@@ -180,6 +180,12 @@
     -fx-font-weight: bold;
 }
 
+.status-ready {
+    -fx-text-fill: #4192d9;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
 .status-closed {
     -fx-text-fill: #B83232;
     -fx-font-size: 16px;
