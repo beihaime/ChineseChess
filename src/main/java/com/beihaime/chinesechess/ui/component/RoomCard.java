@@ -64,6 +64,7 @@ public record RoomCard(VBox view, Room room) {
                 return;
             }
             try {
+                //enter Lan server room
                 ChessApplication.chess(stage);
             } catch (TranscoderException | IOException e) {
                 throw new RuntimeException(e);

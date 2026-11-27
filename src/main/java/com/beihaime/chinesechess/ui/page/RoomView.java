@@ -61,7 +61,7 @@ public class RoomView {
 
         root.getStyleClass().add("main-container");
 
-        root.setLeft(roomListView.getScrollPane());
+        root.setLeft(roomListView.getView());
         root.setRight(controlPanel);
 
         scene.getStylesheets().add(css.toExternalForm());
