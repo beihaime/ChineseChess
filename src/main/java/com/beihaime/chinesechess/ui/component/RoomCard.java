@@ -6,10 +6,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.Separator;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.apache.batik.transcoder.TranscoderException;
 
@@ -21,12 +20,24 @@ public record RoomCard(VBox view, Room room) {
 
         ChessButton chessButton = new ChessButton(stage);
 
-        HBox header = new HBox(400);
+        HBox header = new HBox();
         GridPane information = new GridPane();
+        ColumnConstraints firstColumn = new ColumnConstraints();
+        firstColumn.setHgrow(Priority.ALWAYS);
+
+        ColumnConstraints secondColumn = new ColumnConstraints();
+        secondColumn.setMinWidth(100);
+        secondColumn.setPrefWidth(100);
+        secondColumn.setMaxWidth(100);
+
+        information.getColumnConstraints().addAll(
+                firstColumn,
+                secondColumn
+        );
 
         Separator separator = new Separator(Orientation.HORIZONTAL);
 
-        information.setHgap(300);
+        information.setHgap(20);
         information.setVgap(15);
 
         view.getStyleClass().add("room-card");
@@ -38,6 +49,14 @@ public record RoomCard(VBox view, Room room) {
         Label port = new Label(String.valueOf(room.getPort()));
         Label playerCountLabel = new Label("PLAYERS: " + room.getPlayerCount() + " / " + room.getMaxPlayers());
         Label roomStatus = new Label(room.getStatus().toString());
+
+        HBox.setHgrow(roomNameLabel, Priority.ALWAYS);
+        roomNameLabel.setMaxWidth(Double.MAX_VALUE);
+        roomNameLabel.setTextOverrun(OverrunStyle.ELLIPSIS);
+        roomStatus.setMinWidth(Region.USE_PREF_SIZE);
+
+        hostAddress.setMaxWidth(Double.MAX_VALUE);
+        hostAddress.setTextOverrun(OverrunStyle.ELLIPSIS);
 
         Button enterButton = chessButton.EnterRoomButton();
         enterButton.setOnAction(event -> {
@@ -76,7 +95,7 @@ public record RoomCard(VBox view, Room room) {
 
         view.getChildren().addAll(header, separator, information);
 
-        view.setPadding(new Insets(12));
+        view.setPadding(new Insets(10, 10, 10, 0));
         view.setSpacing(0);
     }
 }

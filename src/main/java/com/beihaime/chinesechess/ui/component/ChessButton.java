@@ -66,7 +66,7 @@ public class ChessButton {
     }
 
     public final Button EnterRoomButton() {
-        Button enterRoom = new Button("EnterRoom");
+        Button enterRoom = new Button("Enter");
         enterRoom.getStyleClass().add("enter-room-button");
         return enterRoom;
     }
