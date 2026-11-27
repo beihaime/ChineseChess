@@ -36,6 +36,9 @@ public class JoinRoomView {
         join.setOnAction(event -> {
             String ip = ipField.getText();
             int port = Integer.parseInt(portField.getText());
+            if (ip.isEmpty() || port < 1 || port > 65535) {
+                return;
+            }
             try {
                 ChessApplication.getRoomManager().joinRoom(ip,port,stage);
             } catch (IOException e) {
