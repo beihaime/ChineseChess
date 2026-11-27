@@ -5,6 +5,7 @@ import com.beihaime.chinesechess.ui.ChessApplication;
 import com.beihaime.chinesechess.ui.component.ChessBoardView;
 import com.beihaime.chinesechess.ui.component.ChessButton;
 import com.beihaime.chinesechess.ui.component.ChessInfoPanel;
+import com.beihaime.chinesechess.ui.manager.RoomManager;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,6 +19,7 @@ import java.net.URL;
 
 public class ChessGameView {
     private static final String CSS_PATH = "/css/chess.css";
+    private final RoomManager roomManager = ChessApplication.getRoomManager();
 
     public ChessGameView(Stage stage) throws TranscoderException, IOException {
         double WINDOW_WIDTH = ChessApplication.getWindowWidth();
@@ -48,7 +50,11 @@ public class ChessGameView {
 
         quitButton.setOnAction(event -> {
             ChessApplication.mainMenu(stage);
-            ChessApplication.getRoomManager().closeCurrentRoom();
+            try {
+                roomManager.closeCurrentRoom();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
         });
 

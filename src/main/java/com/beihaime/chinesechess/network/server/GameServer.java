@@ -12,18 +12,19 @@ public class GameServer {
     private final int port;
     private ServerSocket serverSocket;
     private final ExecutorService executor= Executors.newFixedThreadPool(5);
-    private final Room serverRoom;
-    public GameServer(int port, Room serverRoom) {
+    public GameServer(int port) throws IOException {
         this.port = port;
-        this.serverRoom = serverRoom;
     }
 
-    public void start() {
+    public void bind() throws IOException {
+        serverSocket = new ServerSocket(port);
+    }
+
+    public void start(Room room) {
         try {
-            serverSocket = new ServerSocket(port);
-            while(true){
+            while(!serverSocket.isClosed()){
                 Socket socket = serverSocket.accept();
-                executor.submit(new ClientHandler(socket,serverRoom));
+                executor.submit(new ClientHandler(socket,room));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -32,11 +33,13 @@ public class GameServer {
 
     public void stop(){
         try {
-            serverSocket.close();
-            executor.shutdown();
-
+            if (!serverSocket.isClosed() || serverSocket != null) {
+                serverSocket.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            executor.shutdown();
         }
     }
 
@@ -44,8 +47,5 @@ public class GameServer {
         return serverSocket.getInetAddress().getHostAddress();
     }
 
-    public Room getRoom(){
-        return serverRoom;
-    }
 
 }

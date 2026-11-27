@@ -64,4 +64,8 @@ public class GameClient  {
 
         return MessageCodec.decode(json);
     }
+
+    public void close() throws IOException {
+        socket.close();
+    }
 }

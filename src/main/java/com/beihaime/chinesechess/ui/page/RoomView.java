@@ -11,11 +11,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 
 public class RoomView {
     private static final String CSS_PATH = "/css/chess.css";
     private static RoomListView roomListView;
+    private final RoomManager roomManager = ChessApplication.getRoomManager();
 
     public RoomView(Stage stage){
         stage.setTitle("Room Selector");
@@ -33,7 +35,11 @@ public class RoomView {
         Button joinRoom = button.JoinRoomButton();
 
         quit.setOnAction(event -> {
-            RoomManager.closeCurrentRoom();
+            try {
+                roomManager.closeCurrentRoom();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             ChessApplication.mainMenu(stage);
         });
 

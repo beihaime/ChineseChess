@@ -41,14 +41,12 @@ public record RoomCard(VBox view, Room room) {
 
         Button enterButton = chessButton.EnterRoomButton();
         enterButton.setOnAction(event -> {
-            if (ChessApplication.getRoomManager().getCurrentRoom().getRoomId().equals("NO-ROOMS")) {
+            if (ChessApplication.getRoomManager().getCurrentRoom() == null) {
                 return;
             }
             try {
                 ChessApplication.chess(stage);
-            } catch (TranscoderException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
+            } catch (TranscoderException | IOException e) {
                 throw new RuntimeException(e);
             }
         });

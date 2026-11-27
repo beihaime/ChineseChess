@@ -17,22 +17,29 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class RoomManager {
-    private static Room currentRoom;
+    private Room currentRoom;
     private GameClient currentClient;
     private final ObjectMapper mapper = MessageCodec.getMapper();
+    private GameServer currentServer;
 
     public Room createRoom(String roomName, int port,int maxPlayers) throws IOException {
-        GameServer server = new GameServer(port,currentRoom);
-        Thread serverThread = new Thread(server::start);
-        serverThread.start();
+
+        currentServer = new GameServer(port);
+        currentServer.bind();
 
         currentRoom = new Room(String.valueOf(UUID.randomUUID()),
                 roomName,
-                server.getIp(),
+                currentServer.getIp(),
                 port,
                 1,
                 maxPlayers,
                 RoomStatus.WAITING);
+
+        Thread serverThread = new Thread(() -> {
+            currentServer.start(currentRoom);
+        });
+        serverThread.start();
+
         return currentRoom;
     }
 
@@ -53,7 +60,7 @@ public class RoomManager {
                         int maxPlayers = response.data().get("maxPlayers").asInt();
                         RoomStatus status = RoomStatus.valueOf(String.valueOf(response.data().get("status").asText()));
                         System.out.println(roomId + " " + roomName + " " + playerCount + " " + maxPlayers + " " + status);
-                        currentRoom= new Room(
+                        Room room= new Room(
                                 roomId,
                                 roomName,
                                 ip,
@@ -62,10 +69,13 @@ public class RoomManager {
                                 maxPlayers,
                                 status
                         );
+                        currentRoom = room;
+
                         Platform.runLater(() -> ChessApplication.Room(stage));
                     }
                     case ("JOIN_FAILED") -> {
                         System.out.println("Failed to join room");
+                        currentClient.close();
                     }
                 }
 
@@ -78,14 +88,24 @@ public class RoomManager {
     }
 
 
-    public static Room getCurrentRoom() {
-        if (currentRoom == null) {
-            return new Room("NO-ROOMS","NOROOMS","NOROOMS",8888,1,1,RoomStatus.WAITING);
+    public final Room getCurrentRoom() {
+        if (currentRoom== null) {
+            return null;
         }
         return currentRoom;
     }
 
-    public static Room closeCurrentRoom() {
+    public final Room closeCurrentRoom() throws IOException {
+        if (currentServer != null) {
+            currentServer.stop();
+            currentServer = null;
+        }
+
+        if (currentClient != null) {
+            currentClient.close();
+            currentClient = null;
+        }
+
         currentRoom = null;
         return currentRoom;
     }

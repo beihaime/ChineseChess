@@ -88,16 +88,6 @@ public class ClientHandler implements Runnable {
             send(response);
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            try {
-                socket.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
-    }
-
-    public ObjectMapper getMapper() {
-        return mapper;
     }
 }
