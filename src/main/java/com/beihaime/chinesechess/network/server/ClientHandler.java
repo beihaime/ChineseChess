@@ -19,6 +19,7 @@ public class ClientHandler implements Runnable {
     private BufferedWriter output;
     private BufferedReader input;
     private final Room serverRoom;
+    private boolean joinedRoom = false;
 
     public ClientHandler(Socket socket,Room serverRoom) {
         this.socket = socket;
@@ -39,11 +40,13 @@ public class ClientHandler implements Runnable {
                         StandardCharsets.UTF_8
                 )
         );
-
     }
 
     public Message receive() throws IOException {
         String json = input.readLine();
+        if (json == null) {
+            return null;
+        }
         Message message = MessageCodec.decode(json);
         return message;
     }
@@ -58,7 +61,7 @@ public class ClientHandler implements Runnable {
     private Message handleMessage(Message message) {
         switch (message.type()) {
             case "JOIN_ROOM" -> {
-                if (!serverRoom.tryaddPlayer()) {
+                if (!serverRoom.tryAddPlayer()) {
                     ObjectNode data = mapper.createObjectNode();
                     data.put("reason","Room is fulled");
                     return new Message(MessageType.JOIN_FAILED.name(), data );
@@ -82,14 +85,27 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        try {
-            handleClient();
-            Message message = receive();
-            Message response = handleMessage(message);
+        while (true) {
+            try {
+                handleClient();
+                Message message = receive();
+                if (message != null) {
+                    Message response = handleMessage(message);
+                    joinedRoom = true;
+                    send(response);
+                }
+                if (message == null && joinedRoom) {
+                    socket.close();
+                    serverRoom.changeRoomStatus(RoomStatus.WAITING);
+                    serverRoom.tryRemovePlayer();
+                    ChessApplication.getRoomManager().notifyOnRoomChanged();
+                    joinedRoom = false;
+                    System.out.println("Client disconnected");
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
-            send(response);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

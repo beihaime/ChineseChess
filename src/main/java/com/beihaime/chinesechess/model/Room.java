@@ -1,5 +1,7 @@
 package com.beihaime.chinesechess.model;
 
+import com.beihaime.chinesechess.game.Game;
+
 public class Room {
 
     private final String roomId;
@@ -9,6 +11,7 @@ public class Room {
     private int playerCount;
     private final int maxPlayers;
     private RoomStatus status;
+    private final Game game;
 
     public Room(String roomId, String roomName, String hostAddress, int port, int playerCount,int maxPlayers, RoomStatus status) {
         this.roomId = roomId;
@@ -18,6 +21,7 @@ public class Room {
         this.hostAddress = hostAddress;
         this.port = port;
         this.status = status;
+        this.game = new Game();
 
         if (port < 1 || port > 65535) {
             throw new IllegalArgumentException("Invalid port");
@@ -56,16 +60,27 @@ public class Room {
         this.status = status;
     }
 
-    public synchronized boolean tryaddPlayer() {
-        if (playerCount == maxPlayers) {
+    public synchronized boolean tryAddPlayer() {
+        if (playerCount >= maxPlayers) {
             return false;
         }
         this.playerCount++;
         return true;
+    }
 
+    public synchronized void tryRemovePlayer() {
+        if (playerCount > 0) {
+            this.playerCount--;
+        }
     }
 
     public void changeRoomName(String roomName) {
         this.roomName = roomName;
     }
+
+    public Game getGame() {
+        return game;
+    }
+
+
 }
