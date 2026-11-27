@@ -262,6 +262,9 @@ public class RuleEngine {
                 (to.y() < 7 || to.y() > 9)) {
             return false;
         }
+        if (bottomSide == Side.RED && to.y() > 2) {
+            return false;
+        }
         //Red area
         return self.side() != Side.RED || !bottomSide.equals(Side.RED) || to.y() >= 7;
     }
