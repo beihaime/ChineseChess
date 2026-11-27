@@ -28,7 +28,8 @@ public class CreateRoomView {
 
         stage.setTitle("Create a Room");
 
-        VBox root = new VBox();
+        VBox root = new VBox(10);
+        root.setAlignment(Pos.CENTER);
 
         Label title = new Label("Create a Room");
 
