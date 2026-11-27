@@ -1,5 +1,6 @@
 package com.beihaime.chinesechess.ui.component;
 
+import com.beihaime.chinesechess.model.Room;
 import com.beihaime.chinesechess.ui.ChessApplication;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
@@ -42,8 +43,6 @@ public class RoomListView {
         }
         card = new RoomCard(ChessApplication.getRoomManager().getCurrentRoom(),stage);
         createRoomCard(card);
-        refreshRoomCard(card);
-
     }
 
     public ScrollPane getScrollPane() {
@@ -54,9 +53,18 @@ public class RoomListView {
         tilePane.getChildren().add(roomCard.view());
     }
 
-    public void refreshRoomCard(RoomCard roomCard) {
+    public void refreshRoomCard(Stage stage) {
         tilePane.getChildren().clear();
-        tilePane.getChildren().add(roomCard.view());
+
+        Room room = ChessApplication.getRoomManager().getCurrentRoom();
+
+        if (room == null) {
+            card = null;
+            return;
+        }
+
+        card = new RoomCard(room, stage);
+        tilePane.getChildren().add(card.view());
     }
 
     public RoomCard getCard() {

@@ -21,6 +21,7 @@ public class RoomManager {
     private GameClient currentClient;
     private final ObjectMapper mapper = MessageCodec.getMapper();
     private GameServer currentServer;
+    private Runnable onRoomChanged;
 
     public Room createRoom(String roomName, int port,int maxPlayers) throws IOException {
 
@@ -108,5 +109,16 @@ public class RoomManager {
 
         currentRoom = null;
         return currentRoom;
+    }
+
+    public void setOnRoomChanged(Runnable callback) {
+        this.onRoomChanged = callback;
+    }
+
+    public void notifyOnRoomChanged() {
+        if (onRoomChanged == null) {
+            return;
+        }
+        Platform.runLater(onRoomChanged);
     }
 }

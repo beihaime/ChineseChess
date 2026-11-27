@@ -16,7 +16,7 @@ import java.net.URL;
 
 public class RoomView {
     private static final String CSS_PATH = "/css/chess.css";
-    private static RoomListView roomListView;
+    private final RoomListView roomListView;
     private final RoomManager roomManager = ChessApplication.getRoomManager();
 
     public RoomView(Stage stage){
@@ -51,8 +51,6 @@ public class RoomView {
             ChessApplication.joinRoom(stage);
         });
 
-
-
         controlPanel.getChildren().addAll(createRoom,joinRoom,quit);
 
         URL css = getClass().getResource(CSS_PATH);
@@ -72,8 +70,11 @@ public class RoomView {
 
         stage.show();
 
+        roomManager.setOnRoomChanged( () -> refreshRoomlist(stage));
     }
-    public static RoomListView getRoomListView(){
-        return roomListView;
+
+    public void refreshRoomlist(Stage stage) {
+        roomListView.refreshRoomCard(stage);
     }
+
 }

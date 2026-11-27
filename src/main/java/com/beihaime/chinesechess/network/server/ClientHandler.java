@@ -5,6 +5,7 @@ import com.beihaime.chinesechess.model.RoomStatus;
 import com.beihaime.chinesechess.network.protocol.Message;
 import com.beihaime.chinesechess.network.protocol.MessageCodec;
 import com.beihaime.chinesechess.network.protocol.MessageType;
+import com.beihaime.chinesechess.ui.ChessApplication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -63,6 +64,7 @@ public class ClientHandler implements Runnable {
                     return new Message(MessageType.JOIN_FAILED.name(), data );
                 }
                 serverRoom.changeRoomStatus(RoomStatus.PLAYING);
+                ChessApplication.getRoomManager().notifyOnRoomChanged();
                 String player = message.data().get("playerName").asText();
                 System.out.println( "received "+ player);
                 ObjectNode data = mapper.createObjectNode();
