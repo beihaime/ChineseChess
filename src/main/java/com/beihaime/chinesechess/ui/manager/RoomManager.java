@@ -104,6 +104,9 @@ public class RoomManager {
 
         if (currentClient != null) {
             currentClient.close();
+            currentRoom.changeRoomStatus(RoomStatus.WAITING);
+            currentRoom.tryRemovePlayer();
+            ChessApplication.getRoomManager().notifyOnRoomChanged();
             currentClient = null;
         }
 
