@@ -15,4 +15,8 @@ public class MessageCodec {
         return MAPPER.readValue(message, Message.class);
     }
 
+    public static ObjectMapper getMapper() {
+        return MAPPER;
+    }
+
 }

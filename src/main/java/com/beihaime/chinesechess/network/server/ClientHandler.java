@@ -1,10 +1,10 @@
 package com.beihaime.chinesechess.network.server;
 
 import com.beihaime.chinesechess.model.Room;
+import com.beihaime.chinesechess.model.RoomStatus;
 import com.beihaime.chinesechess.network.protocol.Message;
 import com.beihaime.chinesechess.network.protocol.MessageCodec;
 import com.beihaime.chinesechess.network.protocol.MessageType;
-import com.beihaime.chinesechess.ui.ChessApplication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -14,13 +14,14 @@ import java.nio.charset.StandardCharsets;
 
 public class ClientHandler implements Runnable {
     private final Socket socket;
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = MessageCodec.getMapper();
     private BufferedWriter output;
     private BufferedReader input;
-    private final Room serverRoom = ChessApplication.getRoomManager().getCurrentRoom();
+    private final Room serverRoom;
 
-    public ClientHandler(Socket socket) {
+    public ClientHandler(Socket socket,Room serverRoom) {
         this.socket = socket;
+        this.serverRoom = serverRoom;
     }
 
     public void handleClient() throws IOException {
@@ -31,34 +32,12 @@ public class ClientHandler implements Runnable {
             )
         );
 
-
-
-      input = new BufferedReader(
+        input = new BufferedReader(
                 new InputStreamReader(
                         socket.getInputStream(),
                         StandardCharsets.UTF_8
                 )
         );
-
-        String serverInfo = serverRoom.getRoomName() +
-                serverRoom.getRoomId() +
-                serverRoom.getPlayerCount() +
-                serverRoom.getMaxPlayers() +
-                serverRoom.getRoomId() +
-                serverRoom.getStatus();
-
-        Message message = receive();
-        switch (message.type()) {
-            case "JOIN_ROOM" -> {
-                String content = message.data().get("message").asText();
-                System.out.println( "received "+ content);
-                ObjectNode data = mapper.createObjectNode();
-                data.put("message", serverInfo);
-                send(new Message(MessageType.JOIN_SUCCESS.name(), data));
-            }
-        }
-
-
 
     }
 
@@ -75,10 +54,38 @@ public class ClientHandler implements Runnable {
         output.flush();
     }
 
+    private Message handleMessage(Message message) {
+        switch (message.type()) {
+            case "JOIN_ROOM" -> {
+                if (!serverRoom.tryaddPlayer()) {
+                    ObjectNode data = mapper.createObjectNode();
+                    data.put("reason","Room is fulled");
+                    return new Message(MessageType.JOIN_FAILED.name(), data );
+                }
+                serverRoom.changeRoomStatus(RoomStatus.PLAYING);
+                String player = message.data().get("playerName").asText();
+                System.out.println( "received "+ player);
+                ObjectNode data = mapper.createObjectNode();
+                data.put("roomId", serverRoom.getRoomId());
+                data.put("roomName", serverRoom.getRoomName());
+                data.put("playerCount", serverRoom.getPlayerCount());
+                data.put("maxPlayers", serverRoom.getMaxPlayers());
+                data.put("status",String.valueOf(serverRoom.getStatus()));
+                return new Message(MessageType.JOIN_SUCCESS.name(), data);
+            }
+        }
+        return null;
+
+    }
+
     @Override
     public void run() {
         try {
             handleClient();
+            Message message = receive();
+            Message response = handleMessage(message);
+
+            send(response);
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
@@ -88,5 +95,9 @@ public class ClientHandler implements Runnable {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public ObjectMapper getMapper() {
+        return mapper;
     }
 }

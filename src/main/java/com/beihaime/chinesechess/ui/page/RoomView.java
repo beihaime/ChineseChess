@@ -3,6 +3,7 @@ package com.beihaime.chinesechess.ui.page;
 import com.beihaime.chinesechess.ui.ChessApplication;
 import com.beihaime.chinesechess.ui.component.ChessButton;
 import com.beihaime.chinesechess.ui.component.RoomListView;
+import com.beihaime.chinesechess.ui.manager.RoomManager;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,7 +15,7 @@ import java.net.URL;
 
 public class RoomView {
     private static final String CSS_PATH = "/css/chess.css";
-    private final RoomListView roomListView;
+    private static RoomListView roomListView;
 
     public RoomView(Stage stage){
         stage.setTitle("Room Selector");
@@ -32,7 +33,7 @@ public class RoomView {
         Button joinRoom = button.JoinRoomButton();
 
         quit.setOnAction(event -> {
-            ChessApplication.getRoomManager().closeCurrentRoom();
+            RoomManager.closeCurrentRoom();
             ChessApplication.mainMenu(stage);
         });
 
@@ -65,5 +66,8 @@ public class RoomView {
 
         stage.show();
 
+    }
+    public static RoomListView getRoomListView(){
+        return roomListView;
     }
 }

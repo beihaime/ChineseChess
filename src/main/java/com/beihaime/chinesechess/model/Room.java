@@ -10,14 +10,14 @@ public class Room {
     private final int maxPlayers;
     private RoomStatus status;
 
-    public Room(String roomId, String roomName, String hostAddress, int port, int maxPlayers) {
+    public Room(String roomId, String roomName, String hostAddress, int port, int playerCount,int maxPlayers, RoomStatus status) {
         this.roomId = roomId;
-        this.playerCount = 1;
+        this.playerCount = playerCount;
         this.maxPlayers = maxPlayers;
         this.roomName = roomName;
         this.hostAddress = hostAddress;
         this.port = port;
-        this.status = RoomStatus.WAITING;
+        this.status = status;
 
         if (port < 1 || port > 65535) {
             throw new IllegalArgumentException("Invalid port");
@@ -56,8 +56,13 @@ public class Room {
         this.status = status;
     }
 
-    public void addPlayer() {
+    public synchronized boolean tryaddPlayer() {
+        if (playerCount == maxPlayers) {
+            return false;
+        }
         this.playerCount++;
+        return true;
+
     }
 
     public void changeRoomName(String roomName) {
