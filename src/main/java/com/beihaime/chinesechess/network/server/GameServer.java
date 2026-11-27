@@ -5,6 +5,7 @@ import com.beihaime.chinesechess.model.Room;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,13 +22,17 @@ public class GameServer {
     }
 
     public void start(Room room) {
-        try {
-            while(!serverSocket.isClosed()){
+        while(!serverSocket.isClosed()){
+            try {
                 Socket socket = serverSocket.accept();
                 executor.submit(new ClientHandler(socket,room));
+            } catch (SocketException e) {
+                if (serverSocket.isClosed()) {
+                    break;
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
